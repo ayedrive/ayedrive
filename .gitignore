@@ -33,6 +33,7 @@ __pycache__/
 .pytest_cache/
 .coverage
 *.log
+docs/_site/
 
 # VM images, installers, and signing material
 *.iso

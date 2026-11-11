@@ -7,7 +7,7 @@ CFLAGS ?= -std=c99 -Wall -Wextra -Wpedantic -Werror -O2
 CXXFLAGS ?= -std=c++17 -Wall -Wextra -Wpedantic -Werror -O2
 BUILD_DIR ?= build
 
-.PHONY: all test test-cpp clean
+.PHONY: all test test-cpp test-store test-sim clean
 
 all: $(BUILD_DIR)/test_device_protocol
 
@@ -26,9 +26,23 @@ $(BUILD_DIR)/test_device_protocol_cpp: tests/test_device_protocol_cpp.cpp $(BUIL
 test-cpp: $(BUILD_DIR)/test_device_protocol_cpp
 	./$(BUILD_DIR)/test_device_protocol_cpp
 
-test: $(BUILD_DIR)/test_device_protocol $(BUILD_DIR)/test_device_protocol_cpp
+$(BUILD_DIR)/test_device_store: core/device_store.c tests/test_device_store.c include/device_store.h | $(BUILD_DIR)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -std=c11 core/device_store.c tests/test_device_store.c -o $@
+
+$(BUILD_DIR)/test_device_protocol_sim: core/device_protocol.c core/device_protocol_sim.c tests/test_device_protocol_sim.c include/device_protocol.h include/device_protocol_sim.h include/device_hal.h | $(BUILD_DIR)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -std=c11 core/device_protocol.c core/device_protocol_sim.c tests/test_device_protocol_sim.c -o $@
+
+test-store: $(BUILD_DIR)/test_device_store
+	./$(BUILD_DIR)/test_device_store
+
+test-sim: $(BUILD_DIR)/test_device_protocol_sim
+	./$(BUILD_DIR)/test_device_protocol_sim
+
+test: $(BUILD_DIR)/test_device_protocol $(BUILD_DIR)/test_device_protocol_cpp $(BUILD_DIR)/test_device_store $(BUILD_DIR)/test_device_protocol_sim
 	./$(BUILD_DIR)/test_device_protocol
 	./$(BUILD_DIR)/test_device_protocol_cpp
+	./$(BUILD_DIR)/test_device_store
+	./$(BUILD_DIR)/test_device_protocol_sim
 
 clean:
 	rm -rf $(BUILD_DIR)

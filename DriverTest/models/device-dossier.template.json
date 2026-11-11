@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "dossierId": "intake.replace-with-device-id",
+  "status": "intake",
+  "device": {
+    "manufacturer": "TBD; retain manufacturer documentation reference",
+    "model": "TBD; exact commercial model and variants",
+    "hardwareRevision": "TBD",
+    "identifiers": ["TBD; VID/PID, PCI VID/DID/subsystem, ACPI ID, board ID, or equivalent"],
+    "firmware": "TBD; version, build identity and update mechanism",
+    "protocolReferences": ["TBD; controlled protocol/SDK datasheet reference and revision"]
+  },
+  "interfaces": [
+    {
+      "transport": "custom",
+      "functionalClass": "char_control",
+      "enumeration": "TBD; bus topology, IDs, OS enumeration/match rules",
+      "registersOrEndpoints": "TBD; map/descriptors/queues, access widths, endian and side effects",
+      "interrupts": "TBD; vectors, trigger, affinity, storm/loss behavior, top/bottom-half rules",
+      "dma": "TBD; address width, IOMMU, SG, alignment, ownership and cache-sync requirements"
+    }
+  ],
+  "behavior": {
+    "transfer": ["pio"],
+    "cacheCoherency": "unknown",
+    "concurrency": "TBD; serialization, ordering, ISR-safe versus sleepable operations",
+    "lifecycle": "TBD; enumeration, hotplug, reset, suspend/resume, removal and restart",
+    "power": "TBD; rails, states, wake, thermal and brownout behavior",
+    "timing": "TBD; deadlines, throughput, jitter, timestamps and settling constraints",
+    "errorRecovery": "TBD; errors, safe state, watchdog, retries and recovery limits"
+  },
+  "targets": ["windows_umdf"],
+  "evidence": {
+    "sourceDocuments": [],
+    "goldenTraces": [],
+    "provenance": [],
+    "missingItems": ["Replace all TBD fields with traceable evidence before review"]
+  },
+  "safety": {
+    "role": "undetermined",
+    "profileReference": "../../docs/safety/deployment-assessment-template.md"
+  }
+}

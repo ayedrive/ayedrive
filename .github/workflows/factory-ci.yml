@@ -1,0 +1,91 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.
+name: driver-factory-ci
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  portable-and-generator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install schema validator
+        run: python -m pip install jsonschema==4.23.0
+      - name: Validate schemas and example dossiers
+        run: python tools/driver_factory/validate_schemas.py
+      - name: Run existing Windows test-harness unit tests
+        run: python -m unittest discover -s DriverTest/tests -v
+      - name: Run dossier automation tests
+        env:
+          PYTHONPATH: tools
+        run: python -m unittest discover -s tools/driver_factory/tests -v
+      - name: Build deterministic intake package
+        env:
+          PYTHONPATH: tools
+        run: python -m driver_factory dossier-package DriverTest/models/device-dossier.template.json --out build/dossier
+      - name: Create unsigned SHA-256 inventory of generated evidence
+        env:
+          PYTHONPATH: tools
+        run: python -m driver_factory attest build/dossier --out build/dossier/provenance.manifest.json
+      - name: Verify generated evidence inventory
+        env:
+          PYTHONPATH: tools
+        run: python -m driver_factory verify-attestation build/dossier build/dossier/provenance.manifest.json
+      - name: Strict portable core tests
+        run: make -C Shared clean test CFLAGS='-std=c11 -Wall -Wextra -Wpedantic -Werror -Wconversion -Wshadow -Wstrict-prototypes -fno-common -O2' CXXFLAGS='-std=c++17 -Wall -Wextra -Wpedantic -Werror -O2'
+      - name: Build static documentation and notebooks
+        env:
+          PYTHONPATH: tools
+        run: python -m driver_factory.site docs/_site
+      - uses: actions/upload-artifact@v4
+        with:
+          name: driver-factory-pages
+          path: docs/_site
+          if-no-files-found: error
+      - name: Upload generated evidence drafts
+        uses: actions/upload-artifact@v4
+        with:
+          name: driver-factory-evidence-drafts
+          path: build/dossier
+          if-no-files-found: error
+  optional-tool-availability:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report optional assurance tool availability
+        shell: bash
+        run: |
+          for tool in clang cppcheck cbmc frama-c qemu-system-x86_64 renode; do
+            if command -v "$tool" >/dev/null 2>&1; then
+              printf 'AVAILABLE %s\n' "$tool"
+            else
+              printf 'OPEN_GATE %s not installed on this runner image\n' "$tool"
+            fi
+          done
+          printf '%s\n' 'Windows/macOS/QNX/RTOS native SDK and HIL gates require separate licensed target runners and are not claimed by this workflow.'
+  pages:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: portable-and-generator
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: driver-factory-pages
+          path: site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4

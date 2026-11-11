@@ -42,7 +42,7 @@
     },
     "operatingSystems": {
       "type": "array",
-      "items": {"enum": ["windows_kmdf", "windows_umdf", "windows_wdm", "windows_ndis", "windows_storport", "windows_avstream", "linux_kernel", "linux_uio", "linux_vfio", "linux_libusb", "linux_ebpf_xdp", "android_hal", "macos_driverkit", "macos_iokit_legacy", "qnx_resmgr", "freertos", "safe_rtos", "zephyr", "vxworks", "threadx", "nuttx", "qemu", "renode", "virtio", "xen", "hyperv", "vmware", "acrn", "jailhouse", "qnx_hypervisor"]},
+      "items": {"enum": ["windows_kmdf", "windows_umdf", "windows_wdm", "windows_ndis", "windows_storport", "windows_avstream", "linux_platform_driver", "linux_pci_driver", "linux_usb_driver", "linux_i2c_driver", "linux_spi_driver", "linux_uio", "linux_vfio", "linux_libusb", "linux_spidev", "linux_ebpf_xdp", "android_kernel", "android_hal_aidl", "android_hal_hidl", "macos_driverkit_pci", "macos_driverkit_usb", "macos_driverkit_hid", "macos_driverkit_audio", "macos_driverkit_networking", "macos_iokit_legacy", "qnx_resmgr", "freertos", "safe_rtos", "zephyr", "vxworks", "threadx", "nuttx", "qemu_qom", "qemu_virtio", "renode", "xen_dom0", "xen_domu", "hyperv_vmbus", "vmware_vmci", "vmware_pvsci", "acrn", "jailhouse", "qnx_hypervisor_ivshmem"]},
       "minItems": 1,
       "uniqueItems": true
     },
