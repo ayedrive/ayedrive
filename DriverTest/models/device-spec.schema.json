@@ -42,7 +42,7 @@
     },
     "operatingSystems": {
       "type": "array",
-      "items": {"enum": ["windows_kmdf", "windows_umdf", "windows_wdm", "windows_ndis", "windows_storport", "windows_avstream", "linux_kernel", "linux_uio", "linux_vfio", "linux_libusb", "linux_ebpf_xdp", "android_hal", "macos_driverkit", "macos_iokit_legacy", "qnx_resmgr", "freertos", "safer tos", "zephyr", "vxworks", "threadx", "nuttx", "qemu", "renode", "virtio", "xen", "hyperv", "vmware", "acrn", "jailhouse", "qnx_hypervisor"]},
+      "items": {"enum": ["windows_kmdf", "windows_umdf", "windows_wdm", "windows_ndis", "windows_storport", "windows_avstream", "linux_kernel", "linux_uio", "linux_vfio", "linux_libusb", "linux_ebpf_xdp", "android_hal", "macos_driverkit", "macos_iokit_legacy", "qnx_resmgr", "freertos", "safe_rtos", "zephyr", "vxworks", "threadx", "nuttx", "qemu", "renode", "virtio", "xen", "hyperv", "vmware", "acrn", "jailhouse", "qnx_hypervisor"]},
       "minItems": 1,
       "uniqueItems": true
     },
