@@ -35,6 +35,11 @@ Specify the software boundary for shared protocol code and separate native bindi
 - **SRS-SEC-004:** Protect device firmware update/reset paths with authenticity, rollback, and recovery requirements where applicable; no generic policy is assumed.
 - **SRS-SAFE-001:** Define safe-state behavior, watchdog/interlock behavior, and fault response for every actuator/robot/critical device profile before implementation.
 - **SRS-SAFE-002:** A documentation or simulator pass shall not be represented as safety certification or hardware validation.
+- **SRS-SAFE-003:** Each safety-relevant deployment shall maintain a version-controlled profile identifying intended use, exact configuration, domains/jurisdictions, standards and editions, system boundary, safety authority, independent reviewer, and evidence references.
+- **SRS-SAFE-004:** The product-level default operating mode shall be monitor-only. Monitoring shall define data quality, freshness, loss/staleness, alarm ownership, timing limits, and operator response; monitoring status shall not imply that a safety function is satisfied.
+- **SRS-SAFE-005:** Any control function shall remain unavailable unless the product-specific design implements and verifies authorization, interlocks, safe-state behavior, independent protection, fault response, and required approvals. Missing, invalid, stale, or mismatched approval/configuration data shall fail closed. A profile flag or HAL capability alone shall never enable control.
+- **SRS-SAFE-006:** Reuse of shared protocol/HAL code shall not inherit or transfer another product's risk classification, safety case, assurance level, regulatory approval, or certification.
+- **SRS-SAFE-007:** Product hazard and security assessments shall record unresolved assumptions, severity/risk method, evidence, owners, residual risk, independent review, and revalidation triggers; unresolved release-blocking items prevent safety-related deployment.
 
 ## 5. Acceptance tests
 | Requirement | Minimum acceptance evidence |
@@ -45,6 +50,7 @@ Specify the software boundary for shared protocol code and separate native bindi
 | SRS-TEST-001–002 | Repeatable test logs with toolchain, OS, profile, and target identity |
 | SRS-SEC-001–004 | Threat review, access-control tests, fuzzing and destructive-action review |
 | SRS-SAFE-001–002 | Approved hazard analysis, traceability, independent review and target evidence |
+| SRS-SAFE-003–007 | Validated deployment profile, product-specific hazard/threat analyses, requirements trace, reviewed safety case, authorization/safe-state verification, target/HIL evidence, independent approval |
 
 ## 6. Deferred requirements
 Native Android, macOS, Linux-kernel, and FreeRTOS builds remain deferred until their SDK/toolchain/headers and exact target are available. Device-specific transport behavior remains deferred until the relevant hardware specification is supplied.

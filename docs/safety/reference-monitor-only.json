@@ -1,0 +1,51 @@
+{
+  "spdx_license_identifier": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "profile_id": "reference.umdf-monitor-only",
+  "profile_version": 1,
+  "status": "draft",
+  "product": {
+    "name": "UMDF 2 root-enumerated reference driver",
+    "version": "repository reference",
+    "intended_use": "Development and training demonstration of a test-only PING/ECHO protocol",
+    "device_identity": "Root-enumerated software device; not a physical device",
+    "firmware": "Not applicable to this software reference",
+    "platform": "Windows UMDF 2 reference project",
+    "jurisdictions": ["Unassigned; no deployment intended"]
+  },
+  "deployment": {
+    "domain_profiles": ["non_safety_reference"],
+    "system_boundary": "Repository sample driver, host-side test client, and Windows test environment",
+    "operational_environment": "Disposable development VM only; no production deployment",
+    "safety_role": "non_safety",
+    "hazard_assessment_reference": "docs/safety/preliminary-reference-assessment.md"
+  },
+  "operating_mode": {
+    "default": "monitor_only",
+    "control_enablement": "disabled"
+  },
+  "safety_governance": {
+    "responsible_organization": "Unassigned",
+    "safety_authority": "Not appointed; no safety function claimed",
+    "independent_reviewer": "Not appointed",
+    "approval_record": "None; draft reference only",
+    "residual_risk_acceptance": "Not assessed; deployment prohibited"
+  },
+  "standards_assessment": [
+    {
+      "standard": "No product safety standard selected",
+      "edition": "Not applicable to this non-deployment reference",
+      "applicability": "pending_assessment",
+      "scope_reference": "This profile describes a development/training sample, not a safety-related product",
+      "approved_by": "None",
+      "approval_reference": "None"
+    }
+  ],
+  "evidence": {
+    "requirements_trace": "docs/requirements/traceability.md",
+    "verification_plan": "docs/test-plan.md",
+    "security_assessment": "docs/safety/preliminary-reference-assessment.md",
+    "configuration_baseline": "Git commit containing this profile; replace with exact release baseline for any product",
+    "release_decision": "No deployment authorization; draft profile"
+  }
+}

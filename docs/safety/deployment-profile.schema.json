@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/dpc-safety-deployment-profile.schema.json",
+  "title": "DPC deployment safety profile",
+  "description": "Planning and traceability metadata for a product deployment. This schema is not a safety mechanism, runtime authorization, certification, or proof of compliance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "profile_id",
+    "profile_version",
+    "status",
+    "product",
+    "deployment",
+    "operating_mode",
+    "safety_governance",
+    "standards_assessment",
+    "evidence"
+  ],
+  "properties": {
+    "spdx_license_identifier": {
+      "const": "GPL-3.0-only"
+    },
+    "copyright": {
+      "const": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved."
+    },
+    "profile_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,95}$"
+    },
+    "profile_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "enum": ["draft", "under_review", "approved_for_validation", "approved_for_deployment", "withdrawn"]
+    },
+    "product": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "intended_use", "device_identity", "firmware", "platform", "jurisdictions"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "intended_use": {"type": "string", "minLength": 1},
+        "device_identity": {"type": "string", "minLength": 1},
+        "firmware": {"type": "string", "minLength": 1},
+        "platform": {"type": "string", "minLength": 1},
+        "jurisdictions": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1}
+      }
+    },
+    "deployment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain_profiles", "system_boundary", "operational_environment", "safety_role", "hazard_assessment_reference"],
+      "properties": {
+        "domain_profiles": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "uniqueItems": true},
+        "system_boundary": {"type": "string", "minLength": 1},
+        "operational_environment": {"type": "string", "minLength": 1},
+        "safety_role": {"enum": ["non_safety", "monitoring", "control", "monitoring_and_control", "undetermined"]},
+        "hazard_assessment_reference": {"type": "string", "minLength": 1}
+      }
+    },
+    "operating_mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["default", "control_enablement"],
+      "properties": {
+        "default": {"const": "monitor_only"},
+        "control_enablement": {"enum": ["disabled", "approval_gated"]},
+        "control_enablement_approval_reference": {"type": "string", "minLength": 1},
+        "safe_state_definition_reference": {"type": "string", "minLength": 1},
+        "independent_protection_reference": {"type": "string", "minLength": 1}
+      }
+    },
+    "safety_governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["responsible_organization", "safety_authority", "independent_reviewer", "approval_record", "residual_risk_acceptance"],
+      "properties": {
+        "responsible_organization": {"type": "string", "minLength": 1},
+        "safety_authority": {"type": "string", "minLength": 1},
+        "independent_reviewer": {"type": "string", "minLength": 1},
+        "approval_record": {"type": "string", "minLength": 1},
+        "residual_risk_acceptance": {"type": "string", "minLength": 1}
+      }
+    },
+    "standards_assessment": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["standard", "edition", "applicability", "scope_reference", "approved_by", "approval_reference"],
+        "properties": {
+          "standard": {"type": "string", "minLength": 1},
+          "edition": {"type": "string", "minLength": 1},
+          "applicability": {"enum": ["applicable", "not_applicable_with_rationale", "jurisdictional_or_customer_requirement", "pending_assessment"]},
+          "scope_reference": {"type": "string", "minLength": 1},
+          "approved_by": {"type": "string", "minLength": 1},
+          "approval_reference": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirements_trace", "verification_plan", "security_assessment", "configuration_baseline", "release_decision"],
+      "properties": {
+        "requirements_trace": {"type": "string", "minLength": 1},
+        "verification_plan": {"type": "string", "minLength": 1},
+        "security_assessment": {"type": "string", "minLength": 1},
+        "configuration_baseline": {"type": "string", "minLength": 1},
+        "release_decision": {"type": "string", "minLength": 1}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"operating_mode": {"properties": {"control_enablement": {"const": "approval_gated"}}, "required": ["control_enablement"]}}, "required": ["operating_mode"]},
+      "then": {"properties": {"operating_mode": {"required": ["control_enablement_approval_reference", "safe_state_definition_reference", "independent_protection_reference"]}, "deployment": {"properties": {"safety_role": {"enum": ["control", "monitoring_and_control"]}}}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "approved_for_deployment"}}, "required": ["status"]},
+      "then": {"properties": {"safety_governance": {"properties": {"approval_record": {"minLength": 3}, "residual_risk_acceptance": {"minLength": 3}}}}}
+    }
+  ]
+}

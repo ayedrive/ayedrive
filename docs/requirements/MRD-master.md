@@ -31,12 +31,15 @@ Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.
 | MR-008 | Async submissions have one completion, defined cancellation, timeout, and buffer ownership semantics. | MUST | Contract tests, race/cancel tests | HAL contract documents intent; ports incomplete |
 | MR-009 | Storage writes require isolated disposable media and explicit authorization. | MUST | Test harness policy and review | Documented; per-platform execution remains |
 | MR-010 | Build and test claims identify exact OS, toolchain, hardware, and result. | MUST | CI/report review | Matrix records known limitations |
-| MR-011 | Original project materials carry GPL-3.0-only and requested copyright. | MUST | Automated source audit and manual provenance review | Audit pending completion |
+| MR-011 | Original project materials carry GPL-3.0-only and requested copyright. | MUST | Automated source audit and manual provenance review | Repository text audit performed; full provenance review pending |
 | MR-012 | Third-party SDK/template material retains separate attribution and license; incompatible/unknown material is not relicensed by assertion. | MUST | Dependency/provenance review | Notice and process documented |
 | MR-013 | Requirements have unique IDs and test traceability. | MUST | Traceability matrix review | This document establishes IDs |
-| MR-014 | Critical-system validation includes hazard analysis, independent reviews, fault injection, target tests, and evidence retention. | MUST when applicable | Safety plan and approval evidence | Guidance only; no certification |
-| MR-015 | Local Git remains remote-free until the user chooses a hosting location. | MUST | `git remote -v` empty | Repository initialization pending |
-| MR-016 | Training materials include staged outcomes, labs, assessments, and prerequisites. | MUST | Curriculum review | Curriculum document pending |
+| MR-014 | Critical-system validation includes hazard analysis, independent reviews, fault injection, target tests, and evidence retention. | MUST when applicable | Product-specific safety case, approval evidence and independent assessment | Framework/templates exist; no product assessment or certification |
+| MR-015 | Local Git remains remote-free until the user chooses a hosting location. | MUST | `git remote -v` empty | Local repository and initial commit exist; no remote |
+| MR-016 | Training materials include staged outcomes, labs, assessments, and prerequisites. | MUST | Curriculum review | Curriculum drafted |
+| MR-017 | Every safety-relevant deployment shall have a controlled profile identifying intended use, domain(s), jurisdiction(s), exact product configuration, applicable standards/editions, safety role, hazards, and approving authority. | MUST when applicable | Profile schema validation and authority review | Schema/template exist; no deployment profile approved |
+| MR-018 | Every deployment shall default to monitor-only; a product control function shall remain unavailable until product-specific authorization, safe-state, independent-protection, verification, and approval evidence is present. | MUST when applicable | Design review and target tests; unauthorized/invalid configuration fails closed | Policy specified; no runtime safety/control mechanism implemented |
+| MR-019 | Reuse of shared core/HAL code shall not transfer safety classification, assurance level, safety case, or certification between products/platforms. | MUST | Architecture and release review | Policy documented; product reviews pending |
 
 ## 3. Interfaces
 ### Portable protocol
@@ -79,6 +82,7 @@ The family catalog is a requirements checklist. It is not evidence that code for
 | MR-007–MR-009 | Unit tests, platform I/O tests, security/fault test records |
 | MR-010–MR-012 | Build logs, license/provenance inventory, dependency review |
 | MR-013–MR-016 | Requirements/test matrix, safety plan, curriculum, Git metadata |
+| MR-017–MR-019 | `docs/safety/`, controlled deployment profile, product-specific assessment and approval records |
 
 ## 7. Change control
 Changes to wire format, HAL ABI, device identity, safety behavior, or platform support require a versioned requirements update, compatibility analysis, tests, review approval, and updated training/operational documentation. Never silently reinterpret existing wire fields.

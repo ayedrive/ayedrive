@@ -1,0 +1,92 @@
+{
+  "spdx_license_identifier": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "profile_catalog_version": 1,
+  "description": "Candidate domain screening presets only. No entry establishes applicability, assurance classification, compliance, or certification. Resolve exact standards/editions with a qualified authority for each product and jurisdiction.",
+  "profiles": [
+    {
+      "id": "automotive",
+      "label": "Automotive road vehicles",
+      "candidate_references": ["ISO 26262", "ISO 21448 (SOTIF, where in scope)", "ISO/SAE 21434", "applicable UNECE regulations such as R155/R156 where applicable"],
+      "authority_roles": ["vehicle manufacturer safety authority", "functional safety assessor", "cybersecurity authority", "type-approval authority as applicable"],
+      "required_decisions": ["item definition and safety scope", "hazard/risk classification via applicable vehicle process", "OEM/Tier-1 safety and cybersecurity requirements", "vehicle network and update lifecycle"]
+    },
+    {
+      "id": "industrial-machinery-robotics",
+      "label": "Industrial machinery, robotics and collaborative robots",
+      "candidate_references": ["IEC 61508", "IEC 62061", "ISO 13849", "ISO 10218 and applicable robot/cobot standards", "IEC 62443"],
+      "authority_roles": ["machine manufacturer safety authority", "integrator", "competent machinery assessor", "site operator"],
+      "required_decisions": ["machine boundary and safety-related control functions", "guarding, protective stops and human interaction", "risk reduction and required performance/integrity determined by applicable process", "integration and commissioning responsibilities"]
+    },
+    {
+      "id": "process-oil-gas",
+      "label": "Process industry, oil and gas, chemical and offshore/onshore facilities",
+      "candidate_references": ["IEC 61511", "IEC 61508", "IEC 62443", "applicable regulator, operator and sector codes"],
+      "authority_roles": ["asset owner process safety authority", "functional safety engineer", "OT security authority", "authority having jurisdiction"],
+      "required_decisions": ["process/system boundary and safety instrumented function allocation", "proof test, bypass and override controls", "site environmental and hazardous-area requirements", "operator, integrator and supplier responsibility"]
+    },
+    {
+      "id": "medical-device",
+      "label": "Medical device software and connected medical devices",
+      "candidate_references": ["IEC 62304", "ISO 14971", "IEC 60601 series where applicable", "IEC 81001-5-1 where applicable", "jurisdiction-specific medical device regulations"],
+      "authority_roles": ["manufacturer quality/regulatory authority", "clinical safety/risk authority", "independent assessor", "competent regulator as applicable"],
+      "required_decisions": ["intended medical purpose and device classification", "software safety class and essential performance", "clinical workflow and usability risks", "quality system, privacy and market authorization"]
+    },
+    {
+      "id": "aviation-airborne",
+      "label": "Aviation and airborne systems",
+      "candidate_references": ["RTCA DO-178C / EUROCAE ED-12C", "DO-254 / ED-80 where hardware is in scope", "ARP4754A and ARP4761 family as accepted by the authority", "DO-326A / ED-202A where security is in scope", "applicable airworthiness rules"],
+      "authority_roles": ["applicant certification authority", "design assurance authority", "authorized reviewer/ODA where applicable", "airworthiness authority"],
+      "required_decisions": ["certification basis and authority agreement", "system safety assessment and software/hardware assurance allocation", "environmental qualification and tool objectives", "supplier, integrator and applicant responsibilities"]
+    },
+    {
+      "id": "rail",
+      "label": "Railway rolling stock, signalling and infrastructure",
+      "candidate_references": ["EN 50126", "EN 50128", "EN 50129", "applicable national railway requirements"],
+      "authority_roles": ["railway safety authority", "operator/infrastructure manager", "independent safety assessor", "national regulator as applicable"],
+      "required_decisions": ["rolling-stock/signalling/infrastructure boundary", "system safety integrity allocation", "operational and maintenance responsibilities", "independent assessment and acceptance route"]
+    },
+    {
+      "id": "grid-scada-ot",
+      "label": "Electrical grid, substations and SCADA/OT",
+      "candidate_references": ["IEC 62443", "IEC 62351", "NERC CIP where applicable", "IEC 61508/61511 only if a functional safety function is in scope", "utility and jurisdiction-specific rules"],
+      "authority_roles": ["asset owner/operator security authority", "grid protection/control authority", "regulator or reliability organization where applicable", "system integrator"],
+      "required_decisions": ["regulated system and asset applicability", "protection/control versus monitoring boundary", "remote access and recovery requirements", "availability, incident response and utility approval"]
+    },
+    {
+      "id": "nuclear",
+      "label": "Nuclear facilities and instrumentation/control systems",
+      "candidate_references": ["IEC 61513", "IEC 60880 and related nuclear I&C standards", "national nuclear regulator rules", "facility cybersecurity requirements"],
+      "authority_roles": ["licensee nuclear safety authority", "nuclear regulator", "independent nuclear assessor", "facility security authority"],
+      "required_decisions": ["licensing basis and safety classification", "defense-in-depth and independence constraints", "environmental/seismic qualification", "configuration, cyber-security and change-control approval"]
+    },
+    {
+      "id": "space",
+      "label": "Space systems and mission software",
+      "candidate_references": ["applicable ECSS software/product assurance standards", "NASA standards/program requirements where applicable", "customer and launch-provider requirements"],
+      "authority_roles": ["mission assurance authority", "program/customer authority", "launch provider", "independent verification/validation authority as required"],
+      "required_decisions": ["mission and criticality classification", "radiation/fault tolerance and lifetime constraints", "space/ground interface boundary", "operations and recovery authority"]
+    },
+    {
+      "id": "defense-military",
+      "label": "Defense and military systems",
+      "candidate_references": ["MIL-STD-882 and program-specific system safety requirements", "platform-specific safety and cybersecurity standards", "national procurement/export-control rules"],
+      "authority_roles": ["program system safety authority", "contracting/customer authority", "platform integrator", "national security/export-control authority as applicable"],
+      "required_decisions": ["contractual standards baseline", "mission and operational hazards", "security classification and data handling", "procurement, deployment and maintenance limits"]
+    },
+    {
+      "id": "consumer-electrical-building",
+      "label": "Consumer, building automation and electrical products with hazardous energy",
+      "candidate_references": ["applicable IEC/UL/EN product safety standards", "functional safety standards only when a safety-related control function exists", "jurisdictional connected-product cybersecurity rules"],
+      "authority_roles": ["manufacturer product safety/compliance authority", "certification laboratory", "market regulator", "building owner/operator as applicable"],
+      "required_decisions": ["product category and intended use", "hazardous energy and foreseeable misuse", "regional market and certification scheme", "update support, privacy and customer obligations"]
+    },
+    {
+      "id": "other-safety-relevant",
+      "label": "Other, mixed or emerging safety-relevant domains",
+      "candidate_references": ["Select applicable sector standards, regulations, customer/operator requirements, and generic functional safety references through formal scope assessment"],
+      "authority_roles": ["product owner safety authority", "qualified domain specialist", "regulator/customer authority where applicable", "independent assessor"],
+      "required_decisions": ["intended use and jurisdiction", "system boundary and hazards", "candidate standards and documented exclusions", "assurance and independent assessment route"]
+    }
+  ]
+}

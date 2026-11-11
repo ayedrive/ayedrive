@@ -19,3 +19,7 @@ Status describes this repository, not the general capability of the operating sy
 The model catalog distinguishes USB, Bluetooth, Wi-Fi, PCI/PCIe, network, storage/block, robot/control systems, accelerators, root-enumerated software devices, and custom devices. A category entry is only a checklist: matching a physical device requires its exact IDs, protocol, firmware, bus behavior, timing, power, reset, and error semantics.
 
 The shared C core should include only behavior that is part of the same device protocol on every target. Transport mechanics and operating-system APIs stay in bindings. If a device protocol differs by firmware or vendor, it must be versioned/profiled rather than forced into a single generic operation set.
+
+## Safety applicability boundary
+
+Safety readiness is deployment-specific and does not follow from the platform or shared HAL. The current reference code is non-safety development/training material. Every actual safety-relevant product must select and approve its applicable domain/jurisdiction profiles, standards editions, intended use, hazards, security risks, monitor/control role, safety case, target verification, and independent review. The default role is monitor-only; the current code does not implement a safety monitor or control function. See `docs/safety/` for screening and evidence templates; none is a certification claim.

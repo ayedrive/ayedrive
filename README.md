@@ -22,9 +22,12 @@ Build the Windows project with the WDK in Visual Studio (`UMDF 2 Driver1/UMDF 2 
 - `docs/requirements/MRD-market.md`, `MRD-master.md`, `SRS.md`: requirements baseline.
 - `docs/architecture.md`, `docs/engineering-guide.md`, `docs/platform-matrix.md`, `docs/platform-extension-guide.md`: system boundaries and development.
 - `docs/test-plan.md`, `docs/device-modeling.md`, `docs/critical-systems-validation.md`: test and validation process.
+- `docs/safety/`: domain screening, per-deployment profile schema, preliminary reference assessment, hazard/security, safety-case and independent-review templates. This is not product approval or certification.
 - `docs/training/`: staged curriculum and assessment.
 - `docs/roadmap.md`: implementation and verification status.
 - `docs/license-and-provenance.md`, `NOTICE.md`, `LICENSE`: licensing and provenance rules.
 
 ## Support status
 See `docs/platform-matrix.md` and `docs/roadmap.md`. Native Android, macOS, FreeRTOS and Linux-kernel builds are not verified in the current Windows/WSL environment. No specific physical-device implementation is claimed.
+
+Critical-systems readiness is not established for any product. The repository's PING/ECHO UMDF sample is non-safety development/training code. Per-deployment hazard/security analysis, standards/edition approval, target/HIL testing, and independent assessment remain required before any safety-related use. Monitoring is not automatically safe; control must remain disabled until product-specific safeguards and approvals are verified.

@@ -1,0 +1,36 @@
+# Domain applicability and candidate standards matrix
+
+SPDX-License-Identifier: GPL-3.0-only  
+Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.
+
+This matrix is an **initial screening aid**, not legal advice, a complete standards inventory, an applicability decision, or evidence of compliance. Editions, amendments, national adoptions, regulations, sector/customer rules, and certification routes change. A qualified domain/regulatory authority must select and record exact editions and scope for each product and jurisdiction. A device can span multiple rows.
+
+| Deployment profile | Candidate functional-safety / lifecycle references to assess | Cybersecurity / other sector references to assess | Required product-specific questions |
+|---|---|---|---|
+| Automotive road vehicles | ISO 26262; ISO 21448 (SOTIF) where intended functionality/limitations are in scope | ISO/SAE 21434; applicable UNECE regulations (including R155/R156 where applicable); regional vehicle rules | Vehicle class, item definition, safety goals, ASIL allocation by system process, OEM/Tier-1 requirements, vehicle network/update lifecycle |
+| Industrial machinery, robotics and collaborative robots | IEC 61508; IEC 62061; ISO 13849; ISO 10218 and applicable robot/cobot standards | IEC 62443; machinery regulations and product-specific EMC/electrical requirements | Machinery type, protective stop/guarding, safety-related control system boundary, PL/SIL method, human interaction, integrator responsibility |
+| Process industry, oil and gas, chemical | IEC 61511 (process sector) and IEC 61508; applicable sector/regulator codes (for example, API/ISA publications as identified by the operator) | IEC 62443; site OT policies and applicable offshore/onshore rules | Hazardous process, SIF allocation, independence, proof-test interval, bypass/override management, environmental/explosion protection and authority having jurisdiction |
+| Medical device software / connected medical device | IEC 62304; ISO 14971; IEC 60601 series where applicable; jurisdiction-specific medical-device regulations | IEC 81001-5-1 and jurisdictional cybersecurity/privacy requirements where applicable | Device class and intended medical purpose, software safety class, essential performance, clinical workflow, risk management, quality-system and regulator submissions |
+| Aviation / airborne systems | RTCA DO-178C / EUROCAE ED-12C; DO-254 / ED-80 for airborne electronic hardware; ARP4754A/ARP4761 family as accepted by certification authority; applicable airworthiness rules | DO-326A/ED-202A and related aviation security guidance where in scope | Aircraft/system function, certification basis, authority/ODA agreement, DAL allocation, airborne environment, tool/verification objectives, applicant versus supplier responsibilities |
+| Rail | EN 50126, EN 50128, EN 50129; applicable national rail rules | Applicable railway cybersecurity standards/regulations and operator requirements | Rolling stock/signalling scope, safety integrity allocation, infrastructure/operator boundaries, lifecycle evidence and independent assessment |
+| Electrical grid, substations and SCADA/OT | IEC 61508/61511 only where a functional safety function is actually in scope; applicable utility engineering standards | IEC 62443; IEC 62351; NERC CIP where applicable in North America; jurisdiction/utility requirements | Bulk electric system applicability, asset owner/operator roles, protection/control boundary, availability and recovery, secure remote access, relay/substation communications |
+| Nuclear facilities | IEC 61513; IEC 60880 and related nuclear instrumentation/control standards, plus national nuclear regulator rules | Nuclear cyber-security rules/guidance and facility security requirements | Safety category/classification, defense-in-depth, regulator licensing basis, qualification/environmental/seismic requirements, configuration and independence constraints |
+| Space systems | Applicable ECSS software/product assurance standards (including ECSS-Q-ST-80 family) or NASA standards/requirements for the program | Mission assurance, ground/space cybersecurity and customer launch/mission requirements | Mission class, launch/customer authority, radiation/reliability environment, fault tolerance, software assurance, operations lifetime and ground-segment interfaces |
+| Defense / military systems | MIL-STD-882 system safety and program-specific safety requirements; applicable platform standards | Program cybersecurity/assurance policy and export/control obligations | Contractual baseline, system safety authority, mission context, security classification, environment, procurement and national rules |
+| Consumer / building / electrical products with hazardous energy | Applicable IEC/UL/EN product safety standards and functional safety standards only when the product has a safety-related control function | Product cybersecurity/privacy rules applicable to connected products and jurisdiction | Product category, energy sources, foreseeable misuse, certification lab, regional market, software update support obligations |
+| Other / mixed / emerging domains | Select based on intended use, hazards, system boundary, regulator and customer contract; assess IEC 61508 as a generic functional-safety reference only where appropriate | Select sector OT/product cybersecurity and privacy requirements | Document why each candidate applies or does not, interfaces with other regulated systems, and who approves the decision |
+
+## Profile selection workflow
+1. Identify the product, exact intended use, hardware/firmware/software configuration, system boundary, jurisdiction, customer and lifecycle.
+2. Identify hazards and whether the driver monitors, alarms, requests control, or implements a safety function. Monitoring can still create hazards via misleading, late, lost, or insecure information.
+3. Enumerate candidate regulations, standards, customer/operator specifications and certification/assessment routes for all deployment domains.
+4. Have competent domain and regulatory authorities decide applicability and exact editions/scope; document exclusions with rationale and approval.
+5. Determine safety integrity/classification through the applicable system-level process; never derive it from a driver profile, HAL, or this table.
+6. Allocate requirements and independence objectives across device, driver, OS, application, system integrator, operator and protective layers.
+7. Repeat assessment at changes and at release; record profile version, evidence, approval, limitations and expiration/review triggers.
+
+## Cross-domain cautions
+- A single driver or HAL can be part of products subject to different standards, but shared source does not transfer a safety case, assurance level, certification, or approval between products.
+- A monitoring-only role needs quality/timing/fault behavior and operator-response analysis; it is not inherently low risk.
+- Control-enabled software must not be enabled just by a JSON option. It requires verified product architecture, authorization, independent protection, failure containment, target testing, and approved safety case.
+- Standards references above are candidates only; consult current official publications and the responsible authority before requirements are baselined.

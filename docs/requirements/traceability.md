@@ -16,8 +16,11 @@ This is the initial traceability baseline. Evidence marked **pending** must not 
 | MR-008 | `DriverTest/`, platform test plans | isolated VM/simulator test logs | Windows host harness exists; live guest run pending |
 | MR-009 / SRS-SEC-* | `docs/critical-systems-validation.md` | threat analysis and access-control tests | Guidance only; product-specific evidence pending |
 | MR-010 | `docs/platform-matrix.md`, `docs/roadmap.md` | build logs with toolchain/target identity | Partial; unavailable native SDKs documented |
-| MR-011–012 | `LICENSE`, `NOTICE.md`, `docs/license-and-provenance.md` | full source/dependency provenance audit | Policy written; audit pending |
+| MR-011–012 | `LICENSE`, `NOTICE.md`, `docs/license-and-provenance.md` | full source/dependency provenance audit | Repository text audit performed; provenance audit pending |
 | MR-013 | `MRD-master.md`, `SRS.md`, this table | reviewer confirms links and status | Initial baseline |
-| MR-014 / SRS-SAFE-* | `docs/critical-systems-validation.md` | approved standard, hazard/safety case, independent test evidence | Not approved; no safety claim |
-| MR-015 | `.gitignore`, local `.git` | `git remote -v` empty; commit record | Git initialization/commit pending |
+| MR-014 / SRS-SAFE-001–007 | `docs/critical-systems-validation.md`, `docs/safety/` | product-specific standards approval, hazard/threat analysis, safety case, independent review and target evidence | Framework and preliminary reference assessment exist; no product approved; no safety claim |
+| MR-015 | `.gitignore`, local `.git` | `git remote -v` empty; commit record | Local repository and initial commit exist; no remote |
 | MR-016 | `docs/training/` | learner assessment records | Curriculum drafted; delivery/assessment pending |
+| MR-017 | `docs/safety/deployment-profile.schema.json`, deployment profile | schema validation and authority-approved profile | Schema and non-safety sample profile exist; product profile pending |
+| MR-018 | `docs/safety/README.md`, product architecture and tests | mode/security design review and target fail-closed/control safety tests | Policy specified only; runtime control gating not implemented |
+| MR-019 | `docs/architecture.md`, `docs/safety/` | product safety-case review of reused components | Boundary documented; deployment reviews pending |
