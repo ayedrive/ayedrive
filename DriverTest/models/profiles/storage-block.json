@@ -1,0 +1,17 @@
+{
+  "license": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "schemaVersion": 1,
+  "profileId": "storage-block-device",
+  "status": "requirements-only",
+  "transport": "storage",
+  "bindings": {
+    "windows": "Storage class/Storport or device-specific storage driver",
+    "linux": "Block layer, SCSI/NVMe/other transport driver",
+    "android": "Linux storage driver plus Android vold/health/vendor interfaces as appropriate",
+    "macos": "Supported storage class or DriverKit family with exact API review",
+    "freertos": "Board-specific block/flash controller, filesystem and wear policy"
+  },
+  "hardwareRequirements": ["capacity and sector/page size", "command set", "alignment/queue limits", "flush/barrier behavior", "media errors", "power-loss and recovery scenarios"],
+  "virtualization": "Use an expendable qcow2 image and a device-specific controller model. Never expose a host physical disk to test writes."
+}

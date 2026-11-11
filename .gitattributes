@@ -1,0 +1,16 @@
+* text=auto
+*.c text eol=lf
+*.h text eol=lf
+*.cpp text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.aidl text eol=lf
+*.mk text eol=lf
+Makefile text eol=lf
+*.vcxproj text eol=crlf
+*.filters text eol=crlf
+*.inf text eol=crlf
+*.slnx text eol=crlf
+LICENSE text eol=lf

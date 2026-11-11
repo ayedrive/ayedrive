@@ -1,0 +1,17 @@
+{
+  "license": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "schemaVersion": 1,
+  "profileId": "root-software-device",
+  "status": "reference-protocol-example",
+  "transport": "root",
+  "bindings": {
+    "windows": "UMDF2Driver1 root-enumerated reference binding",
+    "linux": "dpc-reference misc-device module",
+    "android": "AIDL NDK reference service",
+    "macos": "DriverKit protocol bridge only; native extension still required",
+    "freertos": "Static-queue reference task binding"
+  },
+  "hardwareRequirements": ["none for this software-only protocol test"],
+  "virtualization": "No physical hardware is emulated. This profile verifies the same reference PING/ECHO protocol through different OS-facing adapters."
+}

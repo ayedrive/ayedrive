@@ -1,0 +1,17 @@
+{
+  "license": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "schemaVersion": 1,
+  "profileId": "hardware-accelerator",
+  "status": "requirements-only",
+  "transport": "accelerator",
+  "bindings": {
+    "windows": "Vendor-specific WDF/graphics/compute framework binding and runtime",
+    "linux": "PCI/platform driver plus vendor compute/DRM subsystem integration",
+    "android": "SoC/vendor kernel driver and Android NN/graphics/vendor HAL integration",
+    "macos": "Only supported platform/vendor API; confirm DriverKit and entitlement coverage",
+    "freertos": "Board/vendor accelerator HAL, memory/cache coherency, queues and interrupt port"
+  },
+  "hardwareRequirements": ["vendor IDs and firmware", "queue/command ABI", "memory and DMA/IOMMU rules", "interrupts", "reset/watchdog", "runtime version", "fault recovery"],
+  "virtualization": "Requires a vendor model/simulator or dedicated passthrough hardware; generic PCI emulation is insufficient."
+}

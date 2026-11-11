@@ -1,0 +1,17 @@
+{
+  "license": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "schemaVersion": 1,
+  "profileId": "robot-control-system",
+  "status": "requirements-only",
+  "transport": "robot",
+  "bindings": {
+    "windows": "Separate bus/function drivers and a user-mode control/service API",
+    "linux": "Separate bus/function drivers and a user-space robotics/control service",
+    "android": "Kernel transport plus Android service/HAL only if the target platform is appropriate",
+    "macos": "Supported device binding plus application/service layer; no generic robotics driver model",
+    "freertos": "Board-specific control tasks, interrupts and bus drivers with safety interlocks"
+  },
+  "hardwareRequirements": ["bus topology", "command/state protocol", "sensor traces", "actuator bounds", "watchdog/interlock behavior", "timing/jitter", "safe-state and fault response"],
+  "virtualization": "Requires a deterministic protocol simulator and safety interlocks; no generic VM profile models a robot."
+}

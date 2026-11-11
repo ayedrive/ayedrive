@@ -1,0 +1,17 @@
+{
+  "license": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "schemaVersion": 1,
+  "profileId": "pci-pcie-function",
+  "status": "requirements-only",
+  "transport": "pci",
+  "bindings": {
+    "windows": "WDF PnP function driver or applicable class family",
+    "linux": "PCI driver registered for exact vendor/device/subsystem IDs",
+    "android": "Linux PCI driver on supported SoC/platform plus Android vendor integration",
+    "macos": "DriverKit only if the PCI family and API are supported",
+    "freertos": "Board/SoC-specific PCIe host or endpoint controller and vendor HAL"
+  },
+  "hardwareRequirements": ["vendor/device/subsystem IDs", "config-space fields", "BAR/MMIO map", "interrupt model", "DMA/IOMMU requirements", "reset/power/error semantics"],
+  "virtualization": "QEMU needs a model for the specific PCI function; a virtual PCI bus does not emulate arbitrary hardware."
+}

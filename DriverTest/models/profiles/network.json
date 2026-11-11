@@ -1,0 +1,17 @@
+{
+  "license": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "schemaVersion": 1,
+  "profileId": "network-interface",
+  "status": "requirements-only",
+  "transport": "network",
+  "bindings": {
+    "windows": "NDIS miniport/filter or vendor network family",
+    "linux": "netdev driver with applicable networking subsystem integration",
+    "android": "Linux network driver and Android connectivity/vendor integration",
+    "macos": "Supported network DriverKit family or platform-owned driver path",
+    "freertos": "Vendor network interface and TCP/IP stack port"
+  },
+  "hardwareRequirements": ["bus and hardware IDs", "packet/queue model", "link state", "offloads", "multicast/VLAN behavior", "reset and fault cases"],
+  "virtualization": "QEMU e1000e/virtio-net is a useful Ethernet test device but is not a model of other network hardware or Wi-Fi."
+}

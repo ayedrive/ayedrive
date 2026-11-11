@@ -1,0 +1,57 @@
+# Visual Studio and MSBuild
+.vs/
+**/bin/
+**/obj/
+**/Debug/
+**/Release/
+**/x64/
+**/x86/
+**/ARM64/
+*.user
+*.suo
+*.VC.db
+*.VC.VC.opendb
+
+# Native build outputs
+**/build/
+Shared/build/
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dll
+*.exe
+*.sys
+*.pdb
+*.ilk
+*.cat
+
+# Test, cache, and generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+*.log
+
+# VM images, installers, and signing material
+*.iso
+*.vhd
+*.vhdx
+*.vdi
+*.vmdk
+*.qcow2
+*.wim
+*.esd
+*.cer
+*.pfx
+*.p12
+*.key
+*.pvk
+*.snk
+
+# Local secrets/configuration
+.env
+.env.*
+!.env.example
+local.settings.json
