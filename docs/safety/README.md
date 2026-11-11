@@ -1,6 +1,6 @@
 # Deployment safety profiles
 
-SPDX-License-Identifier: GPL-3.0-only  
+SPDX-License-Identifier: GPL-3.0-only
 Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.
 
 Each product deployment requires its own controlled safety profile, even when portable protocol code or a HAL implementation is reused. Domain names are configuration selectors for review checklists and evidence plans; they do not assign an integrity level, establish applicability, or imply certification.

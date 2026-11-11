@@ -1,6 +1,6 @@
 # Independent review and release gate
 
-SPDX-License-Identifier: GPL-3.0-only  
+SPDX-License-Identifier: GPL-3.0-only
 Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.
 
 Use the independence and competence criteria required by the selected domain standard, regulator, customer, and assurance route. A checkbox is not an approval; preserve named reviewers, rationale, signed records, findings, and closure evidence.

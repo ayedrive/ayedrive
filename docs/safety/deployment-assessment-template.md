@@ -1,6 +1,6 @@
 # Product deployment assessment template
 
-SPDX-License-Identifier: GPL-3.0-only  
+SPDX-License-Identifier: GPL-3.0-only
 Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.
 
 Copy this file per controlled product/use case. Replace every `TBD`; unresolved items are release blockers. Link controlled records rather than embedding sensitive operational details in this repository.

@@ -1,6 +1,6 @@
 # Domain applicability and candidate standards matrix
 
-SPDX-License-Identifier: GPL-3.0-only  
+SPDX-License-Identifier: GPL-3.0-only
 Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.
 
 This matrix is an **initial screening aid**, not legal advice, a complete standards inventory, an applicability decision, or evidence of compliance. Editions, amendments, national adoptions, regulations, sector/customer rules, and certification routes change. A qualified domain/regulatory authority must select and record exact editions and scope for each product and jurisdiction. A device can span multiple rows.

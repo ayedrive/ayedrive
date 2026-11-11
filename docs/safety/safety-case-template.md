@@ -1,6 +1,6 @@
 # Safety case template
 
-SPDX-License-Identifier: GPL-3.0-only  
+SPDX-License-Identifier: GPL-3.0-only
 Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.
 
 A safety case is a controlled, product-specific argument supported by reviewable evidence. This template is not itself a safety case or approval.
