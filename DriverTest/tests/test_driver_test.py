@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 # Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.
 import sys
+import json
 import unittest
 from pathlib import Path
 
@@ -9,6 +10,22 @@ import driver_test
 
 
 class ManifestTests(unittest.TestCase):
+	def test_device_spec_example_matches_schema(self):
+		models = Path(__file__).resolve().parents[1] / "models"
+		schema = json.loads((models / "device-spec.schema.json").read_text(encoding="utf-8"))
+		spec = json.loads((models / "device-spec.example.json").read_text(encoding="utf-8"))
+		self.assertEqual(1, schema["properties"]["schemaVersion"]["const"])
+		self.assertEqual(set(schema["required"]), set(spec))
+		self.assertIn(spec["classification"]["functionalClass"], schema["properties"]["classification"]["properties"]["functionalClass"]["enum"])
+		self.assertEqual("non_safety", spec["safety"]["role"])
+		self.assertEqual({"transfer", "cacheCoherency", "concurrency", "lifecycle"}, set(spec["behavior"]))
+
+	def test_device_taxonomy_has_six_classes_and_four_axes(self):
+		models = Path(__file__).resolve().parents[1] / "models"
+		catalog = json.loads((models / "device-taxonomy.json").read_text(encoding="utf-8"))
+		self.assertEqual(6, len(catalog["functionalClasses"]))
+		self.assertEqual({"transfer", "cacheCoherency", "concurrency", "lifecycle"}, set(catalog["behavioralAxes"]))
+
 	def test_sample_manifest_is_valid(self):
 		model_path = Path(__file__).resolve().parents[1] / "models" / "umdf2-root.json"
 		model = driver_test.load_manifest(model_path)
@@ -20,8 +37,6 @@ class ManifestTests(unittest.TestCase):
 
 	def test_device_class_catalog_matches_recognized_transports(self):
 		catalog_path = Path(__file__).resolve().parents[1] / "models" / "device-classes.json"
-		import json
-
 		catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
 		self.assertEqual(driver_test.TRANSPORTS, {profile["transport"] for profile in catalog["profiles"]})
 

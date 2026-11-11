@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "device": {
+    "id": "reference_nvram_sensor",
+    "name": "Reference transactional NVRAM telemetry model",
+    "identity": "Software-only teaching model; no physical VID/PID or hardware identity",
+    "firmware": "Not applicable to software reference",
+    "protocol": "Repository test-only PING/ECHO protocol; does not claim NVRAM hardware compatibility"
+  },
+  "classification": {
+    "functionalClass": "char_control",
+    "transports": ["root"]
+  },
+  "behavior": {
+    "transfer": "pio",
+    "cacheCoherency": "not_applicable",
+    "concurrency": "sleepable_worker",
+    "lifecycle": "hotplug_power_managed"
+  },
+  "operatingSystems": ["windows_umdf"],
+  "safety": {
+    "role": "non_safety",
+    "profileReference": "../../docs/safety/reference-monitor-only.json"
+  }
+}

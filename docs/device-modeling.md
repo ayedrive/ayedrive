@@ -4,7 +4,7 @@ SPDX-License-Identifier: GPL-3.0-only
 Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.
 
 ## Purpose
-A profile records facts needed to create one device-family binding and simulator. It is not a generic implementation and must not imply that different vendors or revisions share behavior. Templates are in `DriverTest/models/profiles/`.
+A profile records facts needed to create one device-family binding and simulator. It is not a generic implementation and must not imply that different vendors or revisions share behavior. Templates are in `DriverTest/models/profiles/`. `DriverTest/models/device-spec.schema.json` provides a machine-readable requirements profile using six functional classes and four behavioral axes; `device-taxonomy.json` is the category catalog and `device-spec.example.json` is a software-only example. Neither file asserts an emulator or driver exists.
 
 ## Required device dossier
 Before changing a requirements-only profile to supported, capture:
@@ -37,3 +37,9 @@ Before changing a requirements-only profile to supported, capture:
 5. Simulator capability/gap matrix reviewed; unsafe operations disabled by default.
 6. Host, native platform, VM, and hardware tests pass at their stated evidence levels.
 7. Profile status changes to supported only after peer review of reproducible evidence.
+
+## Specification profile fields
+
+The JSON Schema requires device identity/firmware/protocol claims, one functional class, one or more transport types, transfer semantics, cache-coherency behavior, concurrency model, lifecycle model, target OS execution models, and a safety-profile reference. Use exact values only when supported by a device dossier. For software-only models, say so explicitly and use a `non_safety` profile; do not invent hardware IDs, firmware, or protocol compatibility.
+
+The taxonomy is descriptive, not an implementation generator. QEMU's generic device models do not emulate arbitrary Bluetooth, Wi-Fi, PCI function, robot, accelerator, storage, or fieldbus behavior. A sim-to-real claim requires identical defined core semantics plus backend-specific conformance tests and a fidelity record.
