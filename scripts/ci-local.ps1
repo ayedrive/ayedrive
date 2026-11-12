@@ -10,9 +10,15 @@ try {
 
 	python tools/driver_factory/validate_schemas.py
 	if ($LASTEXITCODE -ne 0) { throw 'Schema validation failed.' }
+	$env:PYTHONPATH = Join-Path $repoRoot 'tools'
+	python -m driver_factory assurance-validate DriverTest/models/assurance-package.json
+	if ($LASTEXITCODE -ne 0) { throw 'Assurance package validation failed.' }
 
 	python -m unittest discover -s DriverTest/tests -v
 	if ($LASTEXITCODE -ne 0) { throw 'DriverTest Python suite failed.' }
+
+	python -m unittest discover -s Shared/tests -p test_virtual_profiles.py -v
+	if ($LASTEXITCODE -ne 0) { throw 'Virtual-device profile validation failed.' }
 
 	$env:PYTHONPATH = Join-Path $repoRoot 'tools'
 	python -m unittest discover -s tools/driver_factory/tests -v

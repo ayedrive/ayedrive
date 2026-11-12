@@ -16,7 +16,7 @@ class StaticSiteTests(unittest.TestCase):
 			output = Path(temp_dir) / "site"
 			written = build(output)
 			training_pages = sorted((output / "training").glob("*.html"))
-			self.assertEqual(7, len(training_pages))
+			self.assertEqual(9, len(training_pages))
 			self.assertTrue((output / "index.html").is_file())
 			self.assertTrue((output / "training" / "index.html").is_file())
 			self.assertGreaterEqual(len(written), 10)

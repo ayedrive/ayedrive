@@ -1,0 +1,6 @@
+# AyeDrive assistant context
+
+SPDX-License-Identifier: GPL-3.0-only
+Copyright (c) 1993-2026 Abhishek Choudhary. All rights reserved.
+
+AyeDrive requires maximum and strictest device-family coverage by default. Implement behavioral AyeAI realizations named `AyeAI: AyeAM <device> sim`, validate them through the implementation-independent black-box harness, and run `scripts/ayeadrive-e2e.sh`. Continue recoverable/non-critical failures by default, record all results in audit JSON/Markdown, and use `AYEADRIVE_FAIL_FAST=1` for release gates. Never infer physical hardware support, HIL, accreditation, regulator approval, safety approval, or certification from simulation evidence.

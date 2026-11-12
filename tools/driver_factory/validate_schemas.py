@@ -17,6 +17,9 @@ def main() -> int:
 		("device-spec.schema.json", "device-spec.example.json"),
 		("device-dossier.schema.json", "device-dossier.template.json"),
 		("adapter-capabilities.schema.json", "adapter-capabilities.json"),
+		("virtual-device-profiles.schema.json", "virtual-device-profiles.json"),
+		("assurance-package.schema.json", "assurance-package.json"),
+		("device-coverage-contract.schema.json", "device-coverage-contract.json"),
 	]
 	for schema_name, document_name in pairs:
 		schema = json.loads((MODELS / schema_name).read_text(encoding="utf-8"))

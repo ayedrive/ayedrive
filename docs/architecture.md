@@ -3,6 +3,10 @@
 SPDX-License-Identifier: GPL-3.0-only  
 Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.
 
+## AyeDrive simulation architecture
+
+AyeDrive adds a separate behavioral simulation plane under `tools/ayeadrive_sim/`. Each requested device family is realized as an independently launched `AyeAI: AyeAM <device> sim` process with a JSON-lines boundary. `tools/ayeadrive_sim/harness.py` is implementation-independent: it drives the process protocol, checks family-specific exercises, lifecycle, faults, and boundary responses, and emits audit JSON/Markdown. This plane validates executable behavioral contracts; it does not replace platform bindings or physical-device evidence.
+
 ## Goal
 Keep device protocol/state-machine logic in one portable C core where the protocol is genuinely identical. Each operating system gets its own driver/service binding. A binding is not a thin alias: it translates that OS's device model, bus requests, memory ownership, cancellation, power, and security rules into the shared core contract.
 

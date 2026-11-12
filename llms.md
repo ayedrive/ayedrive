@@ -4,6 +4,8 @@ SPDX-License-Identifier: GPL-3.0-only
 Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.
 
 ## Current scope
+
+Product name: **AyeDrive**. The default is maximum and strictest coverage for all requested families. A scope reduction requires an explicit reviewed decision and compensating tests.
 The user asked for separate driver types and platform bindings, with common protocol logic/HAL reused where the device protocol is actually the same. Target set: Windows, Linux, Android, macOS, and FreeRTOS; document other OS targets such as Zephyr, QNX, VxWorks, FreeBSD, and embedded Linux. Device categories called out: USB, Bluetooth, Wi-Fi, PCI/PCIe, network, storage/block, robots/control systems, accelerators, and software-enumerated test devices.
 
 ## Current reference code
@@ -14,6 +16,7 @@ The user asked for separate driver types and platform bindings, with common prot
 - `MacOS/` contains only a protocol bridge. It is not a loadable DriverKit extension; Xcode/macOS is required.
 - `FreeRTOS/` contains a static task/queue starter. A concrete BSP, FreeRTOS version and toolchain are required.
 - `DriverTest/` contains a Python device-interface runner, class catalog, model profiles and QEMU scripts.
+- `tools/ayeadrive_sim/` contains independent-process behavioral AyeAM simulations and a black-box conformance harness. Realizations are named `AyeAI: AyeAM <device> sim`.
 
 ## Build and verification discipline
 Run `make -C Shared test` in WSL for core C/C++ tests and `make -C Linux user-client` for the Linux user client. Build the Windows UMDF project with the installed WDK and test-sign only in a disposable VM. Mark native builds and hardware tests as unverified when unavailable. No native build of a platform starter is implied by its presence in the tree.

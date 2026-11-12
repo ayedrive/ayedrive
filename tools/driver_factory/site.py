@@ -96,7 +96,7 @@ def _execute_notebook(path: Path) -> tuple[str, list[dict[str, Any]]]:
 def build(output: Path = DEFAULT_OUTPUT) -> list[str]:
 	output.mkdir(parents=True, exist_ok=True)
 	written: list[str] = []
-	docs = [ROOT / "docs" / "index.md", ROOT / "docs" / "architecture.md", ROOT / "docs" / "target-matrix.md", ROOT / "docs" / "device-dossier-automation.md", ROOT / "docs" / "qemu-ephemeral-testing.md", ROOT / "docs" / "static-site.md", ROOT / "docs" / "critical-systems-validation.md", ROOT / "docs" / "adapter-contract.md", ROOT / "docs" / "safety" / "README.md"]
+	docs = [ROOT / "docs" / "index.md", ROOT / "docs" / "architecture.md", ROOT / "docs" / "target-matrix.md", ROOT / "docs" / "device-dossier-automation.md", ROOT / "docs" / "qemu-ephemeral-testing.md", ROOT / "docs" / "static-site.md", ROOT / "docs" / "critical-systems-validation.md", ROOT / "docs" / "adapter-contract.md", ROOT / "docs" / "assurance-automation.md", ROOT / "docs" / "ayeadrive-simulation-howto.md", ROOT / "docs" / "ayeadrive-release-status.md", ROOT / "docs" / "certification-evidence-status.md", ROOT / "docs" / "development-history.md", ROOT / "docs" / "safety" / "README.md", ROOT / "docs" / "training" / "07-synthetic-virtual-devices.md", ROOT / "docs" / "training" / "08-ayeadrive-independent-simulation.md"]
 	links: list[str] = []
 	for doc in docs:
 		if doc.is_file():

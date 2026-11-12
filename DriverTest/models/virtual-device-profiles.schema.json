@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/driver-factory/virtual-device-profiles.schema.json",
+  "title": "Synthetic virtual device profiles",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["license", "copyright", "schemaVersion", "profiles", "boundary"],
+  "properties": {
+    "license": { "const": "GPL-3.0-only" },
+    "copyright": { "type": "string", "minLength": 1 },
+    "schemaVersion": { "const": 1 },
+    "profiles": {
+      "type": "array",
+      "minItems": 6,
+      "items": { "$ref": "#/$defs/profile" }
+    },
+    "boundary": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "functionalClass", "model", "supportedOperations", "capacity", "faults", "nonClaims"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^synthetic_[a-z0-9_]+$" },
+        "functionalClass": { "enum": ["char_control", "block_storage", "network_fieldbus", "continuous_stream", "actuator_motion_timing", "bus_controller_bridge"] },
+        "model": { "type": "string", "minLength": 1 },
+        "supportedOperations": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["register_read", "register_write", "block_read", "block_write", "packet_send", "packet_receive", "stream_read", "dma_read", "dma_write"] } },
+        "capacity": { "type": "object", "minProperties": 1, "additionalProperties": { "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "string", "minLength": 1 }] } },
+        "faults": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+        "nonClaims": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      }
+    }
+  }
+}

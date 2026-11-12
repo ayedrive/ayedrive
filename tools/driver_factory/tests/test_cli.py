@@ -10,7 +10,7 @@ import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
 
-from driver_factory.cli import evidence_package, main, report, validate_dossier
+from driver_factory.cli import evidence_package, main, report, validate_assurance_package, validate_dossier
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -18,6 +18,18 @@ MODELS = ROOT / "DriverTest" / "models"
 
 
 class DossierTests(unittest.TestCase):
+	def test_assurance_package_validates_without_claiming_certification(self) -> None:
+		package_path = MODELS / "assurance-package.json"
+		with redirect_stdout(io.StringIO()) as output:
+			self.assertEqual(0, main(["assurance-validate", str(package_path)]))
+		self.assertIn('"certification": "not_claimed"', output.getvalue())
+
+	def test_assurance_package_rejects_unknown_requirement_reference(self) -> None:
+		data = json.loads((MODELS / "assurance-package.json").read_text(encoding="utf-8"))
+		data["testCases"][0]["covers"] = ["REQ-UNKNOWN"]
+		with self.assertRaisesRegex(ValueError, "unknown requirements"):
+			validate_assurance_package(data)
+
 	def test_cli_validate_and_report_commands(self) -> None:
 		dossier_path = MODELS / "device-dossier.template.json"
 		with redirect_stdout(io.StringIO()) as output:

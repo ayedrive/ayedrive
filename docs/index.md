@@ -14,6 +14,10 @@ This Pages site is built by `.github/workflows/factory-ci.yml` from repository d
 - [Critical-systems validation framework](critical-systems-validation.html)
 - [Safety profile templates](safety_README.html)
 - [Static site and CI details](static-site.html)
+- [Synthetic virtual-device lab](training_07-synthetic-virtual-devices.html)
+- [Assurance automation](assurance-automation.html)
+- [Development history](development-history.html)
+- [Certification evidence status](certification-evidence-status.html)
 - [Training modules](training/index.html)
 
 Generated content is static; no server or uploaded user/device data is required. Do not publish proprietary OS images, keys, private traces, or personal/sensitive data.

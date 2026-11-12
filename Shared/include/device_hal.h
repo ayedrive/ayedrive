@@ -17,7 +17,10 @@ typedef enum dpc_hal_operation {
 	DPC_HAL_BLOCK_READ = 6,
 	DPC_HAL_BLOCK_WRITE = 7,
 	DPC_HAL_PACKET_SEND = 8,
-	DPC_HAL_PACKET_RECEIVE = 9
+	DPC_HAL_PACKET_RECEIVE = 9,
+	DPC_HAL_STREAM_READ = 10,
+	DPC_HAL_DMA_READ = 11,
+	DPC_HAL_DMA_WRITE = 12
 } dpc_hal_operation;
 
 typedef enum dpc_hal_status {

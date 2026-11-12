@@ -73,6 +73,7 @@ DOSSIER_REQUIRED = {
 DEVICE_REQUIRED = {"manufacturer", "model", "hardwareRevision", "identifiers", "firmware", "protocolReferences"}
 INTERFACE_REQUIRED = {"transport", "functionalClass", "enumeration", "registersOrEndpoints", "interrupts", "dma"}
 EVIDENCE_REQUIRED = {"sourceDocuments", "goldenTraces", "provenance", "missingItems"}
+ASSURANCE_STATUSES = {"planning", "evidence_in_progress", "review_ready", "accepted_for_testing", "approved", "rejected"}
 
 
 def _require_object(value: Any, label: str) -> dict[str, Any]:
@@ -145,6 +146,40 @@ def load_json(path: Path) -> Any:
 		return json.loads(path.read_text(encoding="utf-8"))
 	except (OSError, json.JSONDecodeError) as error:
 		raise ValueError(f"cannot read valid JSON from {path}: {error}") from error
+
+
+def validate_assurance_package(data: Any) -> dict[str, Any]:
+	package = _require_object(data, "assurance package")
+	required = {"schemaVersion", "packageId", "status", "boundary", "requirements", "targetHardware", "simulators", "reviews", "processAssumptions", "standardsAssumptions", "testCases"}
+	required |= {"product", "coverageContract"}
+	_require_keys(package, required, "assurance package")
+	if package["schemaVersion"] != 1 or package["status"] not in ASSURANCE_STATUSES:
+		raise ValueError("assurance package version or status is unsupported")
+	if package["product"] != "AyeDrive" or package["coverageContract"] != "DriverTest/models/device-coverage-contract.json":
+		raise ValueError("assurance package must identify AyeDrive and its coverage contract")
+	if "certified" in package["boundary"].lower() or "approved" in package["boundary"].lower():
+		raise ValueError("assurance package boundary must not claim certification or approval")
+	requirement_ids = {item["id"] for item in package["requirements"]}
+	if len(requirement_ids) != len(package["requirements"]):
+		raise ValueError("assurance requirements must have unique ids")
+	test_ids = {item["id"] for item in package["testCases"]}
+	if len(test_ids) != len(package["testCases"]):
+		raise ValueError("assurance test cases must have unique ids")
+	for test_case in package["testCases"]:
+		unknown = set(test_case["covers"]) - requirement_ids
+		if unknown:
+			raise ValueError(f"{test_case['id']} references unknown requirements: {', '.join(sorted(unknown))}")
+	for simulator in package["simulators"]:
+		if not simulator["realization"].startswith("AyeAI: AyeAM ") or not simulator["realization"].endswith(" sim"):
+			raise ValueError(f"{simulator['id']} must use an AyeAI AyeAM realization name")
+		unknown = set(simulator["coveredRequirements"]) - requirement_ids
+		if unknown:
+			raise ValueError(f"{simulator['id']} references unknown requirements: {', '.join(sorted(unknown))}")
+	if not any(item["status"] == "planned" for item in package["reviews"]):
+		raise ValueError("assurance package requires an unresolved independent review gate")
+	if package["status"] == "approved":
+		raise ValueError("formal approval is outside this planning validator")
+	return package
 
 
 def report(dossier: dict[str, Any]) -> dict[str, Any]:
@@ -222,9 +257,14 @@ def main(argv: list[str] | None = None) -> int:
 	verify = commands.add_parser("verify-attestation", help="verify hashes and paths in an unsigned inventory")
 	verify.add_argument("root", type=Path)
 	verify.add_argument("manifest", type=Path)
+	assurance = commands.add_parser("assurance-validate", help="validate requirements-to-evidence assurance planning package")
+	assurance.add_argument("package", type=Path)
 	args = parser.parse_args(argv)
 	try:
-		if args.command in {"dossier-validate", "dossier-report", "dossier-package"}:
+		if args.command == "assurance-validate":
+			package = validate_assurance_package(load_json(args.package))
+			print(json.dumps({"status": "valid", "packageId": package["packageId"], "certification": "not_claimed"}, indent=2, sort_keys=True))
+		elif args.command in {"dossier-validate", "dossier-report", "dossier-package"}:
 			dossier = validate_dossier(load_json(args.dossier))
 			if args.command == "dossier-package":
 				dossier_package(dossier, args.out)
