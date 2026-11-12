@@ -16,6 +16,7 @@ def main() -> int:
 	pairs = [
 		("device-spec.schema.json", "device-spec.example.json"),
 		("device-dossier.schema.json", "device-dossier.template.json"),
+		("adapter-capabilities.schema.json", "adapter-capabilities.json"),
 	]
 	for schema_name, document_name in pairs:
 		schema = json.loads((MODELS / schema_name).read_text(encoding="utf-8"))
@@ -23,10 +24,6 @@ def main() -> int:
 		Draft202012Validator.check_schema(schema)
 		Draft202012Validator(schema).validate(document)
 		print(f"SCHEMA_VALID {schema_name} {document_name}")
-	registry = json.loads((MODELS / "adapter-capabilities.json").read_text(encoding="utf-8"))
-	if registry.get("schemaVersion") != 1 or not registry.get("adapters"):
-		raise ValueError("adapter capability registry is empty or has unsupported schemaVersion")
-	print(f"REGISTRY_VALID adapters={len(registry['adapters'])}")
 	return 0
 
 

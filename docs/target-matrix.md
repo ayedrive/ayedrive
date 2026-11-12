@@ -21,7 +21,7 @@ This matrix enumerates desired integration surfaces, not current support. A mode
 
 | Target | Desired adapter/model scope | Current baseline level | Gating dependencies |
 |---|---|---:|---|
-| Windows KMDF, UMDF v2, WDM | PnP, user I/O, MMIO, DMA, IRQ, power; legacy WDM only for justified cases | UMDF root reference has build only | WDK versions, disposable guest, hardware/device model; KMDF/WDM not implemented here |
+| Windows KMDF, UMDF v2, WDM | PnP, user I/O, MMIO, DMA, IRQ, power; legacy WDM only for justified cases | UMDF root reference builds/signability verified for WDK Debug/Release x64 and ARM64; no guest load/IOCTL run | WDK versions, disposable guest, hardware/device model; KMDF/WDM not implemented here |
 | Windows NDIS, Storport, AVStream | Native miniport/class contracts | L0 | Relevant WDK samples, class tests, exact device profile |
 | Linux platform/pci/usb/i2c/spi | Native subsystem drivers and lifecycle | L1 | Kernel source/config/headers, QEMU/KVM guest, device model |
 | Linux UIO/VFIO/libusb/spidev | Explicit userspace access/ownership models | L0 | Kernel configuration, IOMMU/isolation and device; no host passthrough by default |
@@ -33,7 +33,7 @@ This matrix enumerates desired integration surfaces, not current support. A mode
 | FreeRTOS/SafeRTOS | Static allocation/notification/ISR profile | L1 | Named release, board/BSP/toolchain; SafeRTOS requires vendor licensing |
 | Zephyr | Devicetree/Kconfig/device API | L0 | Zephyr SDK/west, board, native or QEMU-supported target |
 | VxWorks, ThreadX, NuttX | BSP-specific RTOS adapters | L0 | Vendor SDK/license, board and certification context |
-| QEMU QOM device models | Deterministic reference device emulation | L0 | QEMU development toolchain; QEMU not installed on current Windows/WSL environment |
+| QEMU QOM device models | Deterministic reference device emulation | L0 | QEMU 8.2.2 is available in WSL and can launch an isolated generic guest; no QOM device model exists. Device-specific emulation needs a reviewed dossier and model implementation. |
 | Renode | Peripheral/platform simulation | L0 | Renode installation and peripheral model validation |
 | virtio/vhost-user | Paravirtual frontend/backend | L0 | Linux/QEMU and protocol conformance tests |
 | Xen Dom0/DomU | Split driver, grant tables, event channels | L0 | Xen build/guest tooling and security review |
@@ -48,3 +48,7 @@ See `DriverTest/models/device-taxonomy.json` and `device-spec.schema.json`. Each
 ## Reference virtual models and truth policy
 
 Initial target is a software-only transactional NVRAM/telemetry model and the existing PING/ECHO protocol reference. It is not a physical device. Add virtual models by named profile: model registers/queues, side effects, timing, reset, errors and fault injection; state unsupported or approximate behavior explicitly. QEMU's generic NIC/USB/PCI devices do not model arbitrary devices. Never label an unmodeled function as emulated.
+
+## Local test evidence
+
+The host has QEMU 8.2.2 and qemu-img in WSL. The Ubuntu 26.04 installer already in Downloads was SHA-256 checked against the publisher's `SHA256SUMS`, then launched headlessly in an ephemeral guest with networking and passthrough disabled. The QEMU process was bounded to 120 seconds and its temporary qcow2 was removed. Because no guest console/readiness evidence was captured, this proves launch and cleanup only, not a successful OS boot or driver-in-guest test. Windows UMDF builds and Inf2Cat checks passed for Debug/Release x64 and ARM64. Linux userspace client compiles; the kernel module is blocked by missing matching WSL headers. The existing Android AVD is stale: its configured Android 37 SDK, emulator, and system-image paths are absent.

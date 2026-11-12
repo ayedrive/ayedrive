@@ -24,8 +24,11 @@ Collect, validate, and trace device facts without inventing undocumented behavio
 
 ## Automation slices
 - **Current:** JSON dossier structural validation; deterministic package with normalized input, missing-evidence report, architecture diagram source, per-interface HAZOP prompts, and requirements/source trace links. Evidence indexing hashes supplied files and leaves safety approval and independent review open.
-- **Next:** formal schema validation in the CLI and read-only inventory collector plugins with user consent and tests on disposable targets. Collector output is an observation, not an accepted specification.
+- **Next:** read-only inventory collector plugins with user consent and tests on disposable targets. Collector output is an observation, not an accepted specification. JSON Schema validation is run by `tools/driver_factory/validate_schemas.py` in hosted and local CI; the dependency is pinned in `tools/requirements-ci.txt`.
 - **Later per device:** approved golden trace import, simulator conformance tests, error/fault injection plan and HIL evidence links.
 
 ## Review transitions
 `intake` → `awaiting_evidence` → `review_ready` → `accepted_for_modeling` or `rejected`. Only a named device owner/reviewer may approve identity/protocol facts; a separate safety authority assesses safety-domain claims. No automated transition grants certification or control authorization.
+
+## Reproducible local checks
+Run `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\ci-local.ps1` from the repository root to execute the portable checks mirrored by CI. The script does not change the machine execution policy. It does not deploy GitHub Pages or run native SDK, QEMU guest, physical HIL, or product-approval checks; those remain separate gates.

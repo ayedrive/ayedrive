@@ -15,8 +15,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install schema validator
-        run: python -m pip install jsonschema==4.23.0
+      - name: Install CI dependencies
+        run: python -m pip install -r tools/requirements-ci.txt
       - name: Validate schemas and example dossiers
         run: python tools/driver_factory/validate_schemas.py
       - name: Run existing Windows test-harness unit tests
@@ -29,6 +29,10 @@ jobs:
         env:
           PYTHONPATH: tools
         run: python -m driver_factory dossier-package DriverTest/models/device-dossier.template.json --out build/dossier
+      - name: Build evidence index for generated intake
+        env:
+          PYTHONPATH: tools
+        run: python -m driver_factory evidence-index build/dossier --out build/dossier/evidence-index.json
       - name: Create unsigned SHA-256 inventory of generated evidence
         env:
           PYTHONPATH: tools

@@ -8,6 +8,7 @@ set -euo pipefail
 
 QEMU_SYSTEM="${QEMU_SYSTEM:-qemu-system-x86_64}"
 QEMU_IMG="${QEMU_IMG:-qemu-img}"
+QEMU_SERIAL_LOG="${QEMU_SERIAL_LOG:-}"
 GUEST_RAM_MB="${GUEST_RAM_MB:-2048}"
 GUEST_DISK_GB="${GUEST_DISK_GB:-12}"
 MIN_FREE_MB="${MIN_FREE_MB:-4096}"
@@ -36,6 +37,7 @@ actual_sha="$(sha256sum "$GUEST_ISO" | awk '{print $1}')"
 mkdir -p "$WORK_ROOT"
 work_dir="$(mktemp -d "$WORK_ROOT/driver-factory-qemu.XXXXXXXX")"
 cleanup() {
+	trap - EXIT INT TERM
 	if [[ "$KEEP_GUEST_WORKDIR" == "1" ]]; then
 		printf 'Guest artifacts retained at %s\n' "$work_dir"
 	else
@@ -43,7 +45,9 @@ cleanup() {
 		printf 'Ephemeral guest artifacts deleted.\n'
 	fi
 }
-trap cleanup EXIT INT TERM
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 available_kb="$(df -Pk "$work_dir" | awk 'NR==2 {print $4}')"
 iso_bytes="$(stat -c '%s' "$GUEST_ISO")"
@@ -53,6 +57,11 @@ required_kb=$(( MIN_FREE_MB * 1024 + (iso_bytes + 1023) / 1024 ))
 "$QEMU_IMG" create -f qcow2 "$work_dir/guest.qcow2" "${GUEST_DISK_GB}G" >/dev/null
 printf 'ISO_SHA256=%s\nWORK_DIR=%s\n' "$actual_sha" "$work_dir"
 printf 'This is an ephemeral interactive guest. No host disk, network, shared folder, or passthrough device is attached.\n'
+
+serial_args=()
+if [[ -n "$QEMU_SERIAL_LOG" ]]; then
+	serial_args=(-serial "file:$QEMU_SERIAL_LOG" -monitor none -display none)
+fi
 
 "$QEMU_SYSTEM" \
 	-machine q35,accel="${QEMU_ACCEL:-tcg}" \
@@ -64,5 +73,6 @@ printf 'This is an ephemeral interactive guest. No host disk, network, shared fo
 	-boot order=d \
 	-nic none \
 	-display "${QEMU_DISPLAY:-sdl}" \
+	"${serial_args[@]}" \
 	-no-reboot \
 	-no-shutdown
