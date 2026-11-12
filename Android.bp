@@ -1,0 +1,30 @@
+// SPDX-License-Identifier: GPL-3.0-only
+// Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.
+aidl_interface {
+	name: "com.example.dpc",
+	srcs: ["Android/aidl/com/example/dpc/IDpcProtocol.aidl"],
+	unstable: true,
+	vendor_available: true,
+	backend: {
+		ndk: { enabled: true },
+		cpp: { enabled: false },
+		java: { enabled: false },
+	},
+}
+
+cc_library_static {
+	name: "libdpc_protocol_core",
+	vendor_available: true,
+	srcs: ["Shared/core/device_protocol.c"],
+	export_include_dirs: ["Shared/include"],
+	c_std: "c99",
+}
+
+cc_binary {
+	name: "dpc-reference-service",
+	vendor: true,
+	srcs: ["Android/hal/device_protocol_service.cpp"],
+	static_libs: ["libdpc_protocol_core"],
+	shared_libs: ["libbinder_ndk", "com.example.dpc-ndk"],
+	cpp_std: "c++17",
+}

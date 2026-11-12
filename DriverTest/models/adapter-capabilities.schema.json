@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/driver-factory/adapter-capabilities.schema.json",
+  "title": "Driver adapter capability registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["license", "copyright", "schemaVersion", "systemContractMarkers", "statusDefinitions", "adapters"],
+  "properties": {
+    "license": { "const": "GPL-3.0-only" },
+    "copyright": { "type": "string", "minLength": 1 },
+    "schemaVersion": { "const": 1 },
+    "systemContractMarkers": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "enum": ["OS-LIFECYCLE", "OS-USER-IO", "OS-MMIO-MAP", "OS-DMA-ARENA", "OS-IRQ-WIRE"] }
+    },
+    "statusDefinitions": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": "string", "minLength": 1 }
+    },
+    "adapters": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/adapter" }
+    }
+  },
+  "$defs": {
+    "adapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "status", "source", "verifiedConfiguration", "nativeDeviceModel", "implementedContractMarkers", "missingContractMarkers"],
+      "properties": {
+        "target": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "minLength": 1 },
+        "source": { "type": "string", "minLength": 1 },
+        "verifiedConfiguration": { "type": "string", "minLength": 1 },
+        "nativeDeviceModel": { "type": "string", "minLength": 1 },
+        "implementedContractMarkers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["OS-LIFECYCLE", "OS-USER-IO", "OS-MMIO-MAP", "OS-DMA-ARENA", "OS-IRQ-WIRE"] }
+        },
+        "missingContractMarkers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["OS-LIFECYCLE", "OS-USER-IO", "OS-MMIO-MAP", "OS-DMA-ARENA", "OS-IRQ-WIRE"] }
+        }
+      }
+    }
+  }
+}

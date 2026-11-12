@@ -1,0 +1,62 @@
+{
+  "license": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "schemaVersion": 1,
+  "profiles": [
+    {
+      "id": "synthetic_char_control",
+      "functionalClass": "char_control",
+      "model": "Bounded 256-byte register bank with explicit read/write bounds and reset-to-zero behavior.",
+      "supportedOperations": ["register_read", "register_write"],
+      "capacity": {"register_bytes": 256, "maximum_transfer_bytes": 64},
+      "faults": ["read_out_of_bounds", "write_out_of_bounds", "read_only_register", "next_operation_io_error"],
+      "nonClaims": ["Not a vendor register map or physical sensor.", "No hardware I/O is performed."]
+    },
+    {
+      "id": "synthetic_block_storage",
+      "functionalClass": "block_storage",
+      "model": "In-memory 64-sector, 512-byte block store with bounds checks and deterministic write interruption.",
+      "supportedOperations": ["block_read", "block_write"],
+      "capacity": {"sectors": 64, "sector_bytes": 512, "maximum_request_sectors": 8},
+      "faults": ["sector_out_of_bounds", "read_only", "next_write_io_error", "partial_write_cut_after_half_request"],
+      "nonClaims": ["Volatile memory only; no disk image or persistence.", "Not a filesystem, flash model, or standards-compliant storage device."]
+    },
+    {
+      "id": "synthetic_network_fieldbus",
+      "functionalClass": "network_fieldbus",
+      "model": "Bounded 32-frame loopback queue with deterministic packet order, drop injection, and overflow status.",
+      "supportedOperations": ["packet_send", "packet_receive"],
+      "capacity": {"queue_frames": 32, "maximum_frame_bytes": 1500},
+      "faults": ["queue_overflow", "next_packet_drop", "invalid_frame_length", "receive_empty"],
+      "nonClaims": ["Loopback only; no sockets, NIC, wire, timing guarantee, or fieldbus protocol.", "Not Ethernet/CAN/EtherCAT compatible."]
+    },
+    {
+      "id": "synthetic_continuous_stream",
+      "functionalClass": "continuous_stream",
+      "model": "Deterministic generated sample stream with configured virtual period and underrun/overrun accounting.",
+      "supportedOperations": ["stream_read", "dma_read"],
+      "capacity": {"ring_samples": 1024, "sample_bytes": 4, "default_period_ns": 1000000},
+      "faults": ["ring_overrun", "ring_underrun", "timestamp_overflow", "next_dma_io_error"],
+      "nonClaims": ["No physical ADC, camera, microphone, DMA engine, or real-time scheduling is modeled.", "Timestamps are simulated and not measurements."]
+    },
+    {
+      "id": "synthetic_actuator_motion_timing",
+      "functionalClass": "actuator_motion_timing",
+      "model": "State-only setpoint and virtual watchdog timer; output changes are recorded, never actuated.",
+      "supportedOperations": ["register_read", "register_write"],
+      "capacity": {"setpoint_min": 0, "setpoint_max": 1000, "watchdog_timeout_ms": 100},
+      "faults": ["setpoint_out_of_range", "watchdog_expired", "next_command_rejected", "timer_overflow"],
+      "nonClaims": ["No motor, relay, GPIO, power output, safety function, or physical movement exists.", "Not suitable for safety validation or control use."]
+    },
+    {
+      "id": "synthetic_bus_controller_bridge",
+      "functionalClass": "bus_controller_bridge",
+      "model": "Two endpoint table and bounded 4096-byte DMA arena with ownership, alignment, and address-range checks.",
+      "supportedOperations": ["register_read", "register_write", "dma_read", "dma_write"],
+      "capacity": {"endpoints": 2, "dma_arena_bytes": 4096, "dma_alignment_bytes": 16},
+      "faults": ["invalid_endpoint", "dma_out_of_bounds", "dma_misaligned", "next_dma_io_error"],
+      "nonClaims": ["No PCIe, USB, I2C, SPI, MMIO, interrupt controller, or IOMMU is emulated.", "Does not establish DMA safety or bus conformance."]
+    }
+  ],
+  "boundary": "Synthetic deterministic software models for exercising repository-owned test contracts only; not physical devices, device emulators, drivers, hardware validation, HIL, or certification."
+}

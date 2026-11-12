@@ -1,0 +1,10 @@
+<!-- SPDX-License-Identifier: GPL-3.0-only | Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved. -->
+<Solution>
+  <Configurations>
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="UMDF 2 Driver1/UMDF 2 Driver1.vcxproj" Id="599ff144-2a3a-4bc7-96c9-7e1bf2fc9cf4">
+    <Deploy />
+  </Project>
+</Solution>

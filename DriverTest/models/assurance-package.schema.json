@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/driver-factory/assurance-package.schema.json",
+  "title": "Driver Factory assurance planning package",
+  "description": "A traceable planning and evidence contract. It is not a certificate, accreditation, conformity declaration, or product approval.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "product", "packageId", "status", "boundary", "coverageContract", "requirements", "targetHardware", "simulators", "reviews", "processAssumptions", "standardsAssumptions", "testCases"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "product": {"const": "AyeDrive"},
+    "packageId": {"type": "string", "pattern": "^[a-z][a-z0-9._-]{2,95}$"},
+    "status": {"enum": ["planning", "evidence_in_progress", "review_ready", "accepted_for_testing", "approved", "rejected"]},
+    "boundary": {"type": "string", "minLength": 1},
+    "coverageContract": {"const": "DriverTest/models/device-coverage-contract.json"},
+    "requirements": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/requirement"}},
+    "targetHardware": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/hardware"}},
+    "simulators": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/simulator"}},
+    "reviews": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/review"}},
+    "processAssumptions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/assumption"}},
+    "standardsAssumptions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/standard"}},
+    "testCases": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/testCase"}}
+  },
+  "$defs": {
+    "ref": {"type": "string", "minLength": 1},
+    "status": {"enum": ["assumption", "planned", "observed", "independently_reviewed", "accepted", "rejected"]},
+    "requirement": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "statement", "risk", "verification", "status", "evidenceRefs"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^REQ-[A-Z0-9-]+$"}, "statement": {"type": "string", "minLength": 1},
+        "risk": {"enum": ["low", "medium", "high", "critical", "undetermined"]},
+        "verification": {"enum": ["analysis", "inspection", "simulation", "test", "review", "hardware_test", "field_evaluation"]},
+        "status": {"$ref": "#/$defs/status"}, "evidenceRefs": {"type": "array", "items": {"$ref": "#/$defs/ref"}}
+      }
+    },
+    "hardware": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "osTarget", "functionalClasses", "identity", "status", "evidenceRefs"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^HW-[A-Z0-9-]+$"}, "osTarget": {"type": "string", "minLength": 1},
+        "functionalClasses": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "identity": {"type": "string", "minLength": 1}, "status": {"$ref": "#/$defs/status"},
+        "evidenceRefs": {"type": "array", "items": {"$ref": "#/$defs/ref"}}
+      }
+    },
+    "simulator": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "functionalClass", "modelPath", "realization", "testCommand", "coveredRequirements", "limitations", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^SIM-[A-Z0-9-]+$"}, "functionalClass": {"type": "string"},
+        "modelPath": {"type": "string", "minLength": 1}, "realization": {"type": "string", "pattern": "^AyeAI: AyeAM .+ sim$"}, "testCommand": {"type": "string", "minLength": 1}, "coveredRequirements": {"type": "array", "items": {"$ref": "#/$defs/ref"}},
+        "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "status": {"$ref": "#/$defs/status"}
+      }
+    },
+    "review": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "kind", "requiredArtifacts", "reviewer", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^REV-[A-Z0-9-]+$"}, "kind": {"enum": ["independent_technical_review", "safety_review", "process_audit", "accredited_lab_review"]},
+        "requiredArtifacts": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "reviewer": {"type": "string", "minLength": 1}, "status": {"$ref": "#/$defs/status"}
+      }
+    },
+    "assumption": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "statement", "owner", "requiredEvidence", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^ASM-[A-Z0-9-]+$"}, "statement": {"type": "string", "minLength": 1},
+        "owner": {"type": "string", "minLength": 1}, "requiredEvidence": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "status": {"$ref": "#/$defs/status"}
+      }
+    },
+    "standard": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "jurisdiction", "reference", "applicabilityBasis", "confirmationRequired", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^STD-[A-Z0-9-]+$"}, "jurisdiction": {"type": "string", "minLength": 1},
+        "reference": {"type": "string", "minLength": 1}, "applicabilityBasis": {"type": "string", "minLength": 1},
+        "confirmationRequired": {"type": "boolean"}, "status": {"$ref": "#/$defs/status"}
+      }
+    },
+    "testCase": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "kind", "command", "covers", "expectedEvidence", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^TC-[A-Z0-9-]+$"}, "kind": {"enum": ["schema", "unit", "integration", "simulation", "guest", "hardware", "review"]},
+        "command": {"type": "string", "minLength": 1}, "covers": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/ref"}},
+        "expectedEvidence": {"type": "string", "minLength": 1}, "status": {"$ref": "#/$defs/status"}
+      }
+    }
+  }
+}

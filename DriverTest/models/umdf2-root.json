@@ -1,0 +1,27 @@
+{
+  "license": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "schemaVersion": 1,
+  "name": "UMDF2Driver1 root-enumerated sample",
+  "driver": {
+    "framework": "UMDF",
+    "inf": "UMDF2Driver1.inf"
+  },
+  "device": {
+    "transport": "root",
+    "hardwareIds": ["Root\\UMDF2Driver1"],
+    "interfaceGuid": "{1495036f-aa8f-459f-bf25-f2cfdf85452c}"
+  },
+  "adapter": "windows-interface",
+  "tests": [
+    {
+      "name": "sample-ioctl-completes",
+      "kind": "ioctl",
+      "code": "0x0022e000",
+      "inputHex": "010100000000",
+      "outputLength": 6,
+      "expectSuccess": true,
+      "expectOutputHex": "010000000000"
+    }
+  ]
+}

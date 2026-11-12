@@ -1,0 +1,17 @@
+{
+  "license": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "schemaVersion": 1,
+  "profileId": "bluetooth-controller-or-function",
+  "status": "requirements-only",
+  "transport": "bluetooth",
+  "bindings": {
+    "windows": "UMDF/KMDF Bluetooth stack client or controller-specific binding",
+    "linux": "Bluetooth HCI/controller and Bluetooth subsystem binding",
+    "android": "Linux Bluetooth controller plus Android Bluetooth HAL/service integration",
+    "macos": "Supported DriverKit/controller integration; verify the target family",
+    "freertos": "Board-specific HCI/controller stack and radio driver"
+  },
+  "hardwareRequirements": ["USB/PCI/UART bus identity", "HCI version and command/event behavior", "radio capabilities", "profiles/services", "pairing/security behavior", "timing and coexistence scenarios"],
+  "virtualization": "Requires an HCI/radio/profile model; generic QEMU Ethernet is not Bluetooth emulation."
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/driver-factory/device-spec.schema.json",
+  "title": "Driver Factory Device Specification",
+  "description": "A requirements and simulation profile; it does not prove that a driver, emulator, or physical device implementation exists.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "device", "classification", "behavior", "operatingSystems", "safety"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "device": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "identity", "firmware", "protocol"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9._-]{1,63}$"},
+        "name": {"type": "string", "minLength": 1},
+        "identity": {"type": "string", "minLength": 1},
+        "firmware": {"type": "string", "minLength": 1},
+        "protocol": {"type": "string", "minLength": 1}
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["functionalClass", "transports"],
+      "properties": {
+        "functionalClass": {"enum": ["char_control", "block_storage", "network_fieldbus", "continuous_stream", "actuator_motion_timing", "bus_controller_bridge"]},
+        "transports": {"type": "array", "items": {"enum": ["root", "usb", "bluetooth", "wifi", "pci", "storage", "network", "robot", "accelerator", "i2c", "spi", "can", "custom"]}, "minItems": 1, "uniqueItems": true}
+      }
+    },
+    "behavior": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["transfer", "cacheCoherency", "concurrency", "lifecycle"],
+      "properties": {
+        "transfer": {"enum": ["pio", "irq_fifo", "coherent_dma", "scatter_gather_dma"]},
+        "cacheCoherency": {"enum": ["hardware_coherent", "explicit_sync", "not_applicable"]},
+        "concurrency": {"enum": ["hard_realtime_isr", "deferred_worker", "sleepable_worker"]},
+        "lifecycle": {"enum": ["static_firmware", "hotplug", "hotplug_power_managed"]}
+      }
+    },
+    "operatingSystems": {
+      "type": "array",
+      "items": {"enum": ["windows_kmdf", "windows_umdf", "windows_wdm", "windows_ndis", "windows_storport", "windows_avstream", "linux_platform_driver", "linux_pci_driver", "linux_usb_driver", "linux_i2c_driver", "linux_spi_driver", "linux_uio", "linux_vfio", "linux_libusb", "linux_spidev", "linux_ebpf_xdp", "android_kernel", "android_hal_aidl", "android_hal_hidl", "macos_driverkit_pci", "macos_driverkit_usb", "macos_driverkit_hid", "macos_driverkit_audio", "macos_driverkit_networking", "macos_iokit_legacy", "qnx_resmgr", "freertos", "safe_rtos", "zephyr", "vxworks", "threadx", "nuttx", "qemu_qom", "qemu_virtio", "renode", "xen_dom0", "xen_domu", "hyperv_vmbus", "vmware_vmci", "vmware_pvsci", "acrn", "jailhouse", "qnx_hypervisor_ivshmem"]},
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "profileReference"],
+      "properties": {
+        "role": {"enum": ["non_safety", "monitor_only", "control", "monitoring_and_control", "undetermined"]},
+        "profileReference": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

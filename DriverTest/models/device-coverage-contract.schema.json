@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/driver-factory/device-coverage-contract.schema.json",
+  "title": "Strict synthetic device coverage contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["license", "copyright", "schemaVersion", "coveragePolicy", "reductionPolicy", "boundary", "families"],
+  "properties": {
+    "license": {"const":"GPL-3.0-only"},
+    "copyright": {"type":"string","minLength":1},
+    "schemaVersion": {"const":1},
+    "coveragePolicy": {"const":"maximum_strict_by_default"},
+    "reductionPolicy": {"type":"string","minLength":1},
+    "boundary": {"type":"string","minLength":1},
+    "families": {"type":"array","minItems":15,"uniqueItems":true,"items":{"$ref":"#/$defs/family"}}
+  },
+  "$defs": {
+    "family": {
+      "type":"object","additionalProperties":false,
+      "required":["id","requested","contract"],
+      "properties": {
+        "id":{"type":"string","pattern":"^[a-z0-9_]+$"},
+        "requested":{"type":"string","minLength":1},
+        "contract":{"type":"string","minLength":1}
+      }
+    }
+  }
+}

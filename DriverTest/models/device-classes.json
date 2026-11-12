@@ -1,0 +1,76 @@
+{
+  "license": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "schemaVersion": 1,
+  "profiles": [
+    {
+      "transport": "root",
+      "description": "Software-enumerated Windows device for driver logic and interface smoke tests.",
+      "virtualization": "Windows root enumerator; no QEMU hardware model is required.",
+      "requiredModelDetails": ["hardware ID", "device-interface GUID", "driver package", "expected I/O behavior"],
+      "template": "profiles/root-software.json"
+    },
+    {
+      "transport": "usb",
+      "description": "USB function or host-controller driver.",
+      "virtualization": "QEMU xHCI and a specific emulated USB device, or carefully controlled USB passthrough.",
+      "requiredModelDetails": ["VID/PID", "USB descriptors", "endpoint layout", "control/bulk/interrupt protocol", "firmware or device simulator"],
+      "template": "profiles/usb.json"
+    },
+    {
+      "transport": "bluetooth",
+      "description": "Bluetooth controller, radio, or profile/function driver.",
+      "virtualization": "A modeled USB/PCI HCI controller and radio/profile simulator; generic Ethernet emulation is not Bluetooth emulation.",
+      "requiredModelDetails": ["bus connection", "HCI/controller behavior", "radio capabilities", "profiles", "pairing and timing behavior"],
+      "template": "profiles/bluetooth.json"
+    },
+    {
+      "transport": "wifi",
+      "description": "Wi-Fi miniport, radio, or related device driver.",
+      "virtualization": "A Wi-Fi-aware simulator or matched physical adapter passthrough; QEMU e1000e/virtio-net presents Ethernet, not 802.11.",
+      "requiredModelDetails": ["hardware IDs", "NDIS/WDI contract", "firmware behavior", "radio/scan/association scenarios"],
+      "template": "profiles/wifi.json"
+    },
+    {
+      "transport": "pci",
+      "description": "PCI/PCIe function driver.",
+      "virtualization": "A device-specific QEMU model or dedicated physical passthrough; QEMU's generic PCI bus does not reproduce an arbitrary function.",
+      "requiredModelDetails": ["vendor/device IDs", "configuration space", "BAR/MMIO map", "interrupt/DMA behavior", "reset and power behavior"],
+      "template": "profiles/pci.json"
+    },
+    {
+      "transport": "storage",
+      "description": "Disk, block, or storage-class driver.",
+      "virtualization": "Attach a disposable QEMU qcow2 disk through a supported emulated controller; never test writes against a host disk.",
+      "requiredModelDetails": ["bus/controller", "sector size and capacity", "command set", "error and power-loss scenarios"],
+      "template": "profiles/storage-block.json"
+    },
+    {
+      "transport": "network",
+      "description": "Network interface or network filter driver.",
+      "virtualization": "QEMU e1000e/virtio-net or a device-specific model; traffic and offload behavior require explicit test cases.",
+      "requiredModelDetails": ["hardware IDs", "NDIS contract", "offloads", "link state", "packet scenarios"],
+      "template": "profiles/network.json"
+    },
+    {
+      "transport": "robot",
+      "description": "Robot or control-system device, often composed of multiple buses and interfaces.",
+      "virtualization": "A protocol-aware simulator connected over the same bus or a test adapter; a generic VM cannot model sensors and actuators automatically.",
+      "requiredModelDetails": ["transport topology", "command/state protocol", "sensor traces", "safety interlocks", "timing and failure scenarios"],
+      "template": "profiles/robot.json"
+    },
+    {
+      "transport": "accelerator",
+      "description": "Compute, AI, graphics, or other hardware accelerator.",
+      "virtualization": "A vendor simulator, device-specific QEMU model, or dedicated passthrough hardware; accelerator semantics are vendor-specific.",
+      "requiredModelDetails": ["vendor IDs", "firmware/runtime", "memory and queue model", "DMA/interrupt behavior", "reset and error handling"],
+      "template": "profiles/accelerator.json"
+    },
+    {
+      "transport": "custom",
+      "description": "A device class or bus not covered above.",
+      "virtualization": "Implement a transport-specific simulator or use a controlled device passthrough.",
+      "requiredModelDetails": ["enumeration identity", "bus behavior", "driver interface", "test scenarios"]
+    }
+  ]
+}

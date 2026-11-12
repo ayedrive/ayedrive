@@ -1,0 +1,20 @@
+{
+  "license": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "schemaVersion": 1,
+  "functionalClasses": [
+    {"id": "char_control", "label": "Character and control", "examples": ["register control", "sensor telemetry", "FPGA interface", "seekable NVRAM"]},
+    {"id": "block_storage", "label": "Block and random-access storage", "examples": ["NVMe-style queues", "eMMC", "SD", "NOR/NAND flash"]},
+    {"id": "network_fieldbus", "label": "Network and deterministic fieldbus", "examples": ["Ethernet", "RDMA/RoCE", "CAN/CAN-FD", "EtherCAT", "TSN", "LIN", "SpaceWire"]},
+    {"id": "continuous_stream", "label": "Isochronous and continuous stream", "examples": ["ADC/DAC", "LiDAR/Radar", "camera", "I2S/TDM audio", "IMU"]},
+    {"id": "actuator_motion_timing", "label": "Actuator, motion and timing", "examples": ["PWM motor", "encoder", "watchdog", "PTP clock", "GPIO trigger"]},
+    {"id": "bus_controller_bridge", "label": "Bus controller and bridge", "examples": ["PCIe root complex", "SR-IOV PF/VF", "I2C/SPI master", "USB xHCI", "DMA engine"]}
+  ],
+  "behavioralAxes": {
+    "transfer": ["pio", "irq_fifo", "coherent_dma", "scatter_gather_dma"],
+    "cacheCoherency": ["hardware_coherent", "explicit_sync", "not_applicable"],
+    "concurrency": ["hard_realtime_isr", "deferred_worker", "sleepable_worker"],
+    "lifecycle": ["static_firmware", "hotplug", "hotplug_power_managed"]
+  },
+  "supportWarning": "Taxonomy is descriptive only. Listing an OS, transport, or class is not evidence that a compatible driver or emulator exists. QEMU models and passthrough must be tied to a specific device protocol."
+}

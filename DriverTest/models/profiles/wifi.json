@@ -1,0 +1,17 @@
+{
+  "license": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "schemaVersion": 1,
+  "profileId": "wifi-adapter-or-radio",
+  "status": "requirements-only",
+  "transport": "wifi",
+  "bindings": {
+    "windows": "NDIS/WDI and vendor firmware integration",
+    "linux": "mac80211/cfg80211 or vendor-specific netdev/firmware binding",
+    "android": "Linux Wi-Fi driver plus Android Wi-Fi HAL/AIDL version integration",
+    "macos": "Platform/vendor-supported network family only; verify DriverKit availability",
+    "freertos": "Vendor Wi-Fi stack, radio firmware and board port"
+  },
+  "hardwareRequirements": ["PCI/USB/SDIO bus identity", "firmware and regulatory domain", "scan/association/authentication behavior", "power-save/wake behavior", "offloads and error/recovery cases"],
+  "virtualization": "QEMU e1000e/virtio-net is Ethernet, not an 802.11 radio. Use a Wi-Fi-aware simulator or supported physical passthrough."
+}

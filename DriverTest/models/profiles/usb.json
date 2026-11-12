@@ -1,0 +1,17 @@
+{
+  "license": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "schemaVersion": 1,
+  "profileId": "usb-function",
+  "status": "requirements-only",
+  "transport": "usb",
+  "bindings": {
+    "windows": "UMDF/KMDF USB client or host-controller family; choose exact WDF model",
+    "linux": "USB interface driver or host-controller driver; separate kernel binding",
+    "android": "Linux USB driver plus version/vendor-specific Android HAL if framework exposure is needed",
+    "macos": "DriverKit only for a supported USB device family and target macOS release",
+    "freertos": "Board/vendor USB host/device stack and controller driver"
+  },
+  "hardwareRequirements": ["VID/PID", "device revision", "configuration/interface/endpoint descriptors", "firmware version", "transfer protocol", "reset/suspend/resume behavior"],
+  "virtualization": "QEMU xHCI is only a controller model; a matching USB function needs a device model or controlled passthrough."
+}

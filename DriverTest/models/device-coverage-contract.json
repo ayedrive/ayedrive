@@ -1,0 +1,25 @@
+{
+  "license": "GPL-3.0-only",
+  "copyright": "Copyright (C) 1993-2026 Abhishek Choudhary. All rights reserved.",
+  "schemaVersion": 1,
+  "coveragePolicy": "maximum_strict_by_default",
+  "reductionPolicy": "Coverage may be reduced only by an explicit, reviewed scope decision with rationale, owner, affected requirements, and compensating tests.",
+  "boundary": "These are synthetic software coverage contracts, not physical devices, emulators, drivers, hardware validation, HIL, regulator approval, accreditation, or certification.",
+  "families": [
+    {"id":"transport_usb_pcie_thunderbolt","requested":"USB, PCIe, Thunderbolt, and other transport devices","contract":"enumeration, descriptors/configuration, queues/endpoints, reset, hot-plug, power, DMA, and error recovery"},
+    {"id":"hid_input","requested":"Keyboards, mice, touchscreens, and HID sensors","contract":"reports, usages, contact/button state, debounce, malformed reports, disconnect, and rate limits"},
+    {"id":"audio_video","requested":"Audio and video devices","contract":"stream formats, buffers, timestamps, underrun/overrun, format negotiation, and synchronization"},
+    {"id":"gpu_display","requested":"GPUs and display controllers","contract":"command queues, buffers, modes, fences, reset, memory bounds, and display timing"},
+    {"id":"camera_imaging","requested":"Cameras and imaging devices","contract":"frames, formats, metadata, exposure controls, buffers, timestamps, and dropped-frame recovery"},
+    {"id":"serial_gpio_buses","requested":"Serial, UART, SPI, I2C, CAN, and GPIO devices","contract":"framing, addressing, direction, arbitration, pin state, timeouts, and bus faults"},
+    {"id":"sensor_adc_dac","requested":"Sensors and ADC/DAC devices","contract":"sample ranges, calibration, units, conversion timing, saturation, and channel faults"},
+    {"id":"power_battery","requested":"Power-management and battery controllers","contract":"telemetry, charging states, limits, thermal faults, safe shutdown, and persistence boundaries"},
+    {"id":"secure_crypto","requested":"Secure elements, TPMs, and cryptographic accelerators","contract":"command authorization, key handles, monotonic counters, zeroization, malformed input, and error containment"},
+    {"id":"wireless","requested":"Wi-Fi, Bluetooth, and cellular modems","contract":"discovery, association, control/data channels, radio state, credentials boundary, and link recovery"},
+    {"id":"storage_filesystem","requested":"Storage controllers, RAID, NVMe, and filesystems","contract":"queues, namespaces, metadata, flush/order, redundancy state, media errors, and recovery"},
+    {"id":"virtualization_paravirtual","requested":"Virtualization and paravirtualized interfaces","contract":"feature negotiation, shared rings, notification, migration/reset, isolation, and malformed descriptors"},
+    {"id":"identity_biometric","requested":"Smart-card, biometric, and identity devices","contract":"identity records, authentication attempts, privacy boundary, lockout, cancellation, and replay resistance"},
+    {"id":"industrial_medical_safety","requested":"Industrial safety and medical devices","contract":"observability, alarm/fault states, watchdog, safe-state transition, audit trail, and no autonomous safety claim"},
+    {"id":"multifunction_hotplug","requested":"Multi-function and hot-pluggable devices","contract":"function discovery, dependency ordering, partial failure, insertion/removal, resource ownership, and rollback"}
+  ]
+}
