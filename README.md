@@ -25,6 +25,7 @@ The Bash workflow continues after recoverable/non-critical failures and writes J
 
 - `AGENTS.md`, `llms.md`, `llms.txt`, `conversation.md`, `context.md`, `contract.md`: contributor, assistant, product, and durable decision contracts.
 - `docs/ayeadrive-simulation-howto.md`, `docs/ayeadrive-release-status.md`: AyeDrive operation and release status.
+- `docs/release-version-policy.md`: x.y.z release-version policy and evidence requirements.
 - `docs/architecture.md`, `docs/requirements/`, `docs/platform-matrix.md`: architecture and product requirements.
 - `docs/assurance-automation.md`, `docs/certification-evidence-status.md`: requirements-to-evidence automation and evidence boundaries.
 - `DriverTest/models/device-coverage-contract.json`, `assurance-package.json`: machine-readable coverage and assurance contracts.

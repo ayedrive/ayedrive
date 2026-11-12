@@ -1,0 +1,34 @@
+{
+  "title": "AyeDrive",
+  "version": "0.1.0",
+  "upload_type": "software",
+  "description": "AyeDrive: An Automated, Traceable, and Implementation-Independent Platform for Device Driver Simulation, Validation, and Assurance Planning\n\nAyeDrive is a software platform developed by AyeAI for structured development, simulation, validation, and evidence planning for device-driver and hardware-abstraction workflows. The project addresses the practical difficulty of testing driver behavior across heterogeneous device classes when physical hardware, firmware variants, platform-specific environments, and accredited laboratory infrastructure are unavailable or cannot be exercised deterministically during early development.\n\nThe platform combines a portable protocol and hardware-abstraction foundation with deterministic behavioral simulations, machine-readable requirements, implementation-independent conformance tests, automated audit workflows, and release-provenance artifacts. Its purpose is to provide a repeatable development and learning environment in which device behaviors can be specified, exercised, observed, and evaluated independently from the internal implementation of a simulator or driver model.\n\nThe AyeDrive simulation plane provides AyeAI AyeAM behavioral simulation processes for a broad device-family contract. The covered categories include transport and hot-plug interfaces, USB, PCIe, Thunderbolt, human-interface devices, audio and video devices, GPU and display devices, cameras and imaging devices, serial and embedded buses, UART, SPI, I2C, CAN, GPIO, sensors, ADC and DAC devices, power and battery systems, secure and cryptographic devices, TPM-oriented workflows, wireless devices, storage, RAID, NVMe, filesystems, virtualization and paravirtualization, smart-card and identity devices, biometric devices, industrial and medical safety-oriented devices, and multifunction devices.\n\nEach behavioral realization exposes deterministic lifecycle, state, reset, timing, fault, invalid-operation, and family-specific exercise behavior through a separately launched process interface. The independent harness communicates with those processes through their external contract rather than importing simulator implementation internals. This separation is intended to reduce test coupling and to provide stronger evidence that observed conformance is derived from externally visible behavior rather than from shared implementation details.\n\nAyeDrive also includes a machine-readable coverage contract and assurance package. These artifacts connect product requirements, target hardware assumptions, simulator realizations, executable test cases, review gates, accreditation prerequisites, standards assumptions, limitations, and evidence boundaries. The associated automation is designed to execute the available validation process end to end, preserve structured reports, continue through recoverable failures by default, and support fail-fast operation when required for controlled review.\n\nThe initial 0.1.0 release represents a development and research foundation rather than a production hardware-support claim. The included simulations, reference bindings, schemas, tests, and documentation are intended for software development, education, requirements analysis, assurance preparation, and repeatable local experimentation. They do not constitute evidence of physical-device compatibility, hardware-in-the-loop performance, production readiness, safety approval, regulatory acceptance, accreditation, certification, or approval by any standards or regulatory authority.\n\nThe release is accompanied by deterministic validation outputs and repository provenance information. A release archive is intended to be represented by an exact cryptographic checksum and an OpenTimestamps proof, enabling later verification of the archived source state and its temporal provenance. Future AyeDrive releases will follow the documented x.y.z policy: major versions for incompatible public-contract changes, minor versions for backward-compatible capabilities and device-family additions, and patch versions for backward-compatible fixes, documentation corrections, provenance updates, and test-only changes.",
+  "author_verified": true,
+  "license": "gpl-3.0",
+  "access_right": "open",
+  "creators": [
+    {
+      "name": "Choudhary, Abhishek",
+      "affiliation": "AyeAI",
+      "orcid": "0009-0002-0684-8320"
+    }
+  ],
+  "keywords": [
+    "device drivers",
+    "driver development",
+    "behavioral simulation",
+    "hardware abstraction layer",
+    "requirements traceability",
+    "software assurance",
+    "AyeDrive",
+    "AyeAI"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/ayedrive/ayedrive",
+      "relation": "isIdenticalTo",
+      "resource_type": "software"
+    }
+  ],
+  "repository": "https://github.com/ayedrive/ayedrive"
+}
