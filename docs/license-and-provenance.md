@@ -13,4 +13,8 @@ Before importing code, generated templates, SDK snippets, firmware, protocol spe
 5. Review the Visual Studio/WDK-generated sample and each template's provenance before representing every line as solely owned original code.
 6. Record third-party dependencies and license evidence in `docs/provenance/` before release.
 
+## Strict QEMU source policy
+
+QEMU is an external build and validation dependency, not repository content. AyeDrive must never carry, vendor, modify, or distribute QEMU source code. QEMU use-case build scripts and Makefiles may obtain source only from the host package source mechanism or the official QEMU upstream repository; they must pin and verify the QEMU version and keep the checkout and build output outside the repository. Release archives contain only AyeDrive-owned integration contracts, scripts, tests, and provenance records.
+
 The presence of `LICENSE` and SPDX labels is not a legal determination that all existing or generated content is owned by the named copyright holder. Resolve provenance gaps before public redistribution or relicensing.

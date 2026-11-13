@@ -4,10 +4,11 @@
 from __future__ import annotations
 
 import json
-import hashlib
 import sys
-from dataclasses import dataclass, field
 from typing import Any
+
+from .inventory import SAMPLES
+from .independent_devices import create_device
 
 FAMILIES = {
 	"transport_usb_pcie_thunderbolt": "AyeAI: AyeAM transport device sim",
@@ -45,95 +46,30 @@ FAMILY_EXERCISES = {
 	"multifunction_hotplug": "attach",
 }
 
-@dataclass
-class Device:
-	family: str
-	state: dict[str, Any] = field(default_factory=lambda: {"started": False, "events": [], "faults": []})
-
-	def handle(self, request: dict[str, Any]) -> dict[str, Any]:
-		operation = request.get("operation")
-		if operation == "start":
-			self.state["started"] = True
-			return self.result(operation, "accepted")
-		if operation == "stop":
-			self.state["started"] = False
-			return self.result(operation, "accepted")
-		if operation == "reset":
-			self.state = {"started": self.state["started"], "events": [], "faults": []}
-			return self.result(operation, "accepted")
-		if operation == "fault":
-			fault = request.get("fault")
-			if not isinstance(fault, str) or not fault:
-				return self.result(operation, "invalid_request", error="fault must be non-empty")
-			self.state["faults"].append(fault)
-			return self.result(operation, "accepted")
-		if operation == "exercise":
-			return self.exercise(request)
-		if not self.state["started"]:
-			return self.result(operation, "not_ready")
-		if operation == "write":
-			value = request.get("value")
-			if not isinstance(value, (int, float, str, bool, list, dict)):
-				return self.result(operation, "invalid_request", error="value type unsupported")
-			key = request.get("key", "value")
-			if not isinstance(key, str) or not key:
-				return self.result(operation, "invalid_request", error="key must be non-empty")
-			self.state[key] = value
-			self.state["events"].append({"operation": operation, "key": key})
-			return self.result(operation, "accepted", key=key)
-		if operation == "read":
-			key = request.get("key", "value")
-			if key not in self.state:
-				return self.result(operation, "not_found", key=key)
-			return self.result(operation, "accepted", key=key, value=self.state[key])
-		if operation == "advance":
-			duration = request.get("nanoseconds")
-			if not isinstance(duration, int) or duration < 0:
-				return self.result(operation, "invalid_request", error="nanoseconds must be non-negative integer")
-			now = self.state.get("time_ns", 0)
-			if now > (2**64 - 1) - duration:
-				return self.result(operation, "device_error", error="time overflow")
-			self.state["time_ns"] = now + duration
-			return self.result(operation, "accepted", time_ns=self.state["time_ns"])
-		return self.result(operation, "invalid_request", error="unsupported operation")
-
-	def exercise(self, request: dict[str, Any]) -> dict[str, Any]:
-		expected = FAMILY_EXERCISES[self.family]
-		action = request.get("action")
-		if action != expected:
-			return self.result("exercise", "invalid_request", expected_action=expected)
-		payload = request.get("payload", {})
-		if not isinstance(payload, dict):
-			return self.result("exercise", "invalid_request", error="payload must be an object")
-		if expected == "digest":
-			value = payload.get("data")
-			if not isinstance(value, str):
-				return self.result("exercise", "invalid_request", error="data must be text")
-			return self.result("exercise", "accepted", digest=hashlib.sha256(value.encode("utf-8")).hexdigest())
-		if expected == "sample" and not isinstance(payload.get("channel", 0), int):
-			return self.result("exercise", "invalid_request", error="channel must be integer")
-		if expected == "io" and payload.get("length", 0) not in range(1, 4097):
-			return self.result("exercise", "invalid_request", error="length out of range")
-		self.state["last_exercise"] = {"action": action, "payload": payload}
-		self.state["events"].append({"operation": "exercise", "action": action})
-		return self.result("exercise", "accepted", action=action)
-
-	def result(self, operation: Any, status: str, **extra: Any) -> dict[str, Any]:
-		return {"sim": FAMILIES[self.family], "family": self.family, "operation": operation, "status": status, **extra}
-
-
 def run(stream: Any = sys.stdin, output: Any = sys.stdout) -> None:
-	devices: dict[str, Device] = {}
+	devices: dict[str, Any] = {}
 	for line in stream:
 		if not line.strip():
 			continue
 		request = json.loads(line)
 		family = request.get("family")
+		sample = request.get("sample")
+		if sample in SAMPLES:
+			family = SAMPLES[sample]["family"]
 		if family not in FAMILIES:
 			response = {"status": "invalid_request", "error": "unknown family", "family": family}
 		else:
-			device = devices.setdefault(family, Device(family))
-			response = device.handle(request)
+			key = sample or family
+			if key not in devices:
+				if key not in SAMPLES:
+					response = {"status": "invalid_request", "error": "independent sample required", "family": family}
+					output.write(json.dumps(response, sort_keys=True) + "\n")
+					output.flush()
+					continue
+				devices[key] = create_device(key, SAMPLES)
+			device = devices[key]
+			status, extra = device.handle(request)
+			response = {"sim": f"AyeAI: AyeAM {device.sample} independent device sim", "family": device.family, "sample": device.sample, "kind": device.kind, "operation": request.get("operation"), "status": status, **extra}
 		output.write(json.dumps(response, sort_keys=True) + "\n")
 		output.flush()
 

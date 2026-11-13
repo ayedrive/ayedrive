@@ -72,6 +72,72 @@ Complete Windows setup, install Python and the driver, and enable test signing i
 
 Set `TEST_MEDIA_ISO` to attach the generated harness/package ISO. `QEMU_EXTRA_ARGS` can add trusted, model-specific QEMU command-line options. The launcher does not expose host block devices by default. Do not pass a physical disk to QEMU or run destructive block tests on host storage.
 
+The Windows driver-test launcher shows the real QEMU guest window by default through SDL:
+
+```bash
+WIN_VM_DISK="$HOME/win11-driver-test.qcow2" \
+TEST_MEDIA_ISO="$HOME/driver-test-media.iso" \
+bash DriverTest/qemu/run-windows-guest.sh
+```
+
+Use `QEMU_DISPLAY=gtk` for a GTK window, or set `QEMU_HEADLESS=1` only for an explicitly headless run. The visible QEMU window is the actual guest display; it does not prove that the driver test has run until the guest is configured and the in-guest `driver_test.py` command is executed.
+
+To share one guest framebuffer source across fanout sinks, set `QEMU_DISPLAY_SOCKET` to a host Unix socket path when launching QEMU and run `tools/display_fanout.py --socket <socket> --x11`. Inside the guest, the frame producer connects through `/dev/virtio-ports/ayeadrive.display`; the same fanout process also feeds the HTML viewer `/frame` endpoint.
+
+If the required Windows guest disk or OVMF firmware is absent, the launcher stops before QEMU starts. Do not substitute an Ubuntu ISO or a DriverFactory probe/validation overlay for the installed Windows guest disk.
+
+## Real QEMU guest display path
+
+The Linux QEMU display vertical slice is runnable without a Windows guest disk and uses one guest framebuffer source for both WSL/X11 and the Windows browser:
+
+```bash
+make -C Linux qemu-guest-image
+rm -f /tmp/ayeadrive-qemu-display.sock
+python3 tools/display_fanout.py --socket /tmp/ayeadrive-qemu-display.sock --http-port 8777 --x11
+qemu-system-x86_64 \
+  -machine q35,accel=tcg -cpu max -m 512 -smp 1 \
+  -kernel Linux/build/vmlinuz-qemu \
+  -initrd Linux/build/display_guest.initramfs \
+  -append 'console=ttyS0 rdinit=/init' -nographic -nic none \
+  -chardev socket,id=display,path=/tmp/ayeadrive-qemu-display.sock,server=off \
+  -device virtio-serial \
+  -device virtserialport,chardev=display,name=ayeadrive.display
+```
+
+Open `http://127.0.0.1:8777/index.html` in Windows. The guest runs `display_guest`, which calls the C display HAL and emits frames through the QEMU virtio-serial port. The fanout owns the single source and drives the WSL/X11 window plus the browser `/frame` endpoint. A successful run must show `DPC_GUEST_FIRST_FRAME`, `DPC_FANOUT_FIRST_FRAME`, and a 1,228,800-byte frame response.
+
+### QEMU OS text mode
+
+Run the fanout with a second socket for the guest serial console:
+
+```bash
+python3 tools/display_fanout.py \
+  --socket /tmp/ayeadrive-qemu-display.sock \
+  --serial-socket /tmp/ayeadrive-qemu-serial.sock \
+  --http-port 8777 --x11 --mode text
+```
+
+Add the serial socket to QEMU while retaining `console=ttyS0`:
+
+```bash
+-serial unix:/tmp/ayeadrive-qemu-serial.sock,server=off,wait=off
+```
+
+Open `http://127.0.0.1:8777/index.html?mode=text`. The WSL/X11 window and browser show the actual guest kernel/init output received from `ttyS0`; they do not generate replacement text. The framebuffer view remains available at `?mode=framebuffer`.
+
+## Ubuntu desktop guest with shared text output
+
+For a real desktop guest, use `tools/run_ubuntu_desktop_qemu.sh` instead of the minimal initramfs guest:
+
+```bash
+UBUNTU_ISO="$HOME/Downloads/ubuntu-26.04-desktop-amd64.iso" \
+DISPLAY_SOCKET=/tmp/ayeadrive-qemu-display.sock \
+SERIAL_SOCKET=/tmp/ayeadrive-qemu-serial.sock \
+bash tools/run_ubuntu_desktop_qemu.sh
+```
+
+This boots the Ubuntu desktop ISO from a persistent qcow2 disk, enables QEMU user-mode NAT networking, and runs QEMU headlessly. The host fanout is the only display sink for the virtio-serial HAL framebuffer. The current `display_guest` producer emits a HAL test framebuffer; it does not yet capture Ubuntu’s compositor or browser, so this path must not be described as Ubuntu desktop or YouTube evidence until a DRM/KMS or userspace Ubuntu display backend is connected to the HAL transport. The minimal HAL initramfs is not an Ubuntu desktop.
+
 ## Device models and extension points
 
 `models/device-classes.json` catalogs the requested root, USB, Bluetooth, Wi-Fi, PCI, storage/block, network, robot, accelerator, and custom profiles. A manifest records the driver framework, transport, hardware IDs, interface GUID, adapter, and expected I/O operations. Add concrete device manifests only when the device identity, protocol, and expected behavior are known.

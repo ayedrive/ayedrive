@@ -151,12 +151,12 @@ def load_json(path: Path) -> Any:
 def validate_assurance_package(data: Any) -> dict[str, Any]:
 	package = _require_object(data, "assurance package")
 	required = {"schemaVersion", "packageId", "status", "boundary", "requirements", "targetHardware", "simulators", "reviews", "processAssumptions", "standardsAssumptions", "testCases"}
-	required |= {"product", "coverageContract"}
+	required |= {"product", "coverageContract", "standaloneHalMatrix", "sampleDeviceInventory"}
 	_require_keys(package, required, "assurance package")
 	if package["schemaVersion"] != 1 or package["status"] not in ASSURANCE_STATUSES:
 		raise ValueError("assurance package version or status is unsupported")
-	if package["product"] != "AyeDrive" or package["coverageContract"] != "DriverTest/models/device-coverage-contract.json":
-		raise ValueError("assurance package must identify AyeDrive and its coverage contract")
+	if package["product"] != "AyeDrive" or package["coverageContract"] != "DriverTest/models/device-coverage-contract.json" or package["standaloneHalMatrix"] != "DriverTest/models/standalone-hal-os-matrix.json" or package["sampleDeviceInventory"] != "DriverTest/models/sample-device-inventory.json":
+		raise ValueError("assurance package must identify AyeDrive, coverage, HAL matrix, and sample inventory")
 	if "certified" in package["boundary"].lower() or "approved" in package["boundary"].lower():
 		raise ValueError("assurance package boundary must not claim certification or approval")
 	requirement_ids = {item["id"] for item in package["requirements"]}

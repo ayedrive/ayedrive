@@ -5,7 +5,7 @@
   "description": "A traceable planning and evidence contract. It is not a certificate, accreditation, conformity declaration, or product approval.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "product", "packageId", "status", "boundary", "coverageContract", "requirements", "targetHardware", "simulators", "reviews", "processAssumptions", "standardsAssumptions", "testCases"],
+  "required": ["schemaVersion", "product", "packageId", "status", "boundary", "coverageContract", "standaloneHalMatrix", "sampleDeviceInventory", "requirements", "targetHardware", "simulators", "reviews", "processAssumptions", "standardsAssumptions", "testCases"],
   "properties": {
     "schemaVersion": {"const": 1},
     "product": {"const": "AyeDrive"},
@@ -13,6 +13,8 @@
     "status": {"enum": ["planning", "evidence_in_progress", "review_ready", "accepted_for_testing", "approved", "rejected"]},
     "boundary": {"type": "string", "minLength": 1},
     "coverageContract": {"const": "DriverTest/models/device-coverage-contract.json"},
+    "standaloneHalMatrix": {"const": "DriverTest/models/standalone-hal-os-matrix.json"},
+    "sampleDeviceInventory": {"const": "DriverTest/models/sample-device-inventory.json"},
     "requirements": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/requirement"}},
     "targetHardware": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/hardware"}},
     "simulators": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/simulator"}},

@@ -11,39 +11,26 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from .service import FAMILIES
+from .inventory import SAMPLES
+from .functional_behavior import FUNCTIONS
+from .independent_devices import create_device
 
 
-def cases(family: str) -> list[dict[str, Any]]:
-	action = {
-		"transport_usb_pcie_thunderbolt": "enumerate",
-		"hid_input": "report",
-		"audio_video": "stream",
-		"gpu_display": "command",
-		"camera_imaging": "frame",
-		"serial_gpio_buses": "transfer",
-		"sensor_adc_dac": "sample",
-		"power_battery": "telemetry",
-		"secure_crypto": "digest",
-		"wireless": "link",
-		"storage_filesystem": "io",
-		"virtualization_paravirtual": "ring",
-		"identity_biometric": "authenticate",
-		"industrial_medical_safety": "alarm",
-		"multifunction_hotplug": "attach",
-	}[family]
-	payload = {"data": "AyeDrive"} if action == "digest" else ({"length": 128} if action == "io" else {"channel": 0} if action == "sample" else {})
+def cases(sample: str) -> list[dict[str, Any]]:
+	family = SAMPLES[sample]["family"]
+	action = FUNCTIONS[family]["operation"]
+	payload = dict(FUNCTIONS[family]["required"])
 	return [
-		{"family": family, "operation": "read", "key": "value"},
-		{"family": family, "operation": "start"},
-		{"family": family, "operation": "write", "key": "value", "value": 42},
-		{"family": family, "operation": "read", "key": "value"},
-		{"family": family, "operation": "advance", "nanoseconds": 100},
-		{"family": family, "operation": "fault", "fault": "deterministic_fault"},
-		{"family": family, "operation": "exercise", "action": action, "payload": payload},
-		{"family": family, "operation": "reset"},
-		{"family": family, "operation": "stop"},
-		{"family": family, "operation": "advance", "nanoseconds": -1},
+		{"family": family, "sample": sample, "operation": "read", "key": "value"},
+		{"family": family, "sample": sample, "operation": "start"},
+		{"family": family, "sample": sample, "operation": "write", "key": "value", "value": 42},
+		{"family": family, "sample": sample, "operation": "read", "key": "value"},
+		{"family": family, "sample": sample, "operation": "advance", "nanoseconds": 100},
+		{"family": family, "sample": sample, "operation": "fault", "fault": "deterministic_fault"},
+		{"family": family, "sample": sample, "operation": "exercise", "action": action, "payload": payload},
+		{"family": family, "sample": sample, "operation": "reset"},
+		{"family": family, "sample": sample, "operation": "stop"},
+		{"family": family, "sample": sample, "operation": "advance", "nanoseconds": -1},
 	]
 
 
@@ -52,8 +39,9 @@ def run(output_dir: Path, continue_recoverable: bool = True) -> int:
 	started = datetime.now(timezone.utc).isoformat()
 	results: list[dict[str, Any]] = []
 	failures = 0
-	for family in FAMILIES:
-		requests = cases(family)
+	for sample in SAMPLES:
+		independent = create_device(sample, SAMPLES)
+		requests = cases(sample)
 		process = subprocess.Popen(
 			[sys.executable, "-m", "tools.ayeadrive_sim.service"],
 			stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -72,12 +60,23 @@ def run(output_dir: Path, continue_recoverable: bool = True) -> int:
 		process.stderr.close()
 		expected = ["not_ready", "accepted", "accepted", "accepted", "accepted", "accepted", "accepted", "accepted", "accepted", "not_ready"]
 		observed = [response.get("status") for response in responses]
-		passed = observed == expected and all(response.get("sim", "").startswith("AyeAI: AyeAM ") for response in responses)
+		functional = responses[6]
+		passed = (
+			observed[:6] == expected[:6]
+			and observed[6] == "device_error"
+			and observed[7:] == expected[7:]
+			and all(response.get("sim", "").startswith("AyeAI: AyeAM ") for response in responses)
+			and all(response.get("sample") == sample for response in responses)
+			and responses[8].get("functional") is True
+			and type(independent).__name__.endswith("Simulator")
+			and independent.sample == sample
+			and type(independent).__module__ == f"tools.ayeadrive_sim.devices.{sample}.simulator"
+		)
 		if not passed:
 			failures += 1
 			if not continue_recoverable:
 				break
-		results.append({"family": family, "passed": passed, "expected": expected, "observed": observed, "responses": responses})
+		results.append({"sample": sample, "family": SAMPLES[sample]["family"], "kind": SAMPLES[sample]["kind"], "passed": passed, "expected": expected, "observed": observed, "responses": responses})
 	report = {"product": "AyeDrive", "started": started, "completed": datetime.now(timezone.utc).isoformat(), "families": results, "failures": failures, "status": "passed" if failures == 0 else "failed", "certification": "not_claimed"}
 	(output_dir / "ayeadrive-simulation-report.json").write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 	(output_dir / "ayeadrive-simulation-report.md").write_text("# AyeDrive simulation audit\n\n" + json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")

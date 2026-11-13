@@ -13,6 +13,10 @@ VM_MEMORY="${VM_MEMORY:-8192}"
 VM_CPUS="${VM_CPUS:-4}"
 TEST_MEDIA_ISO="${TEST_MEDIA_ISO:-}"
 WINDOWS_INSTALL_ISO="${WINDOWS_INSTALL_ISO:-}"
+QEMU_DISPLAY="${QEMU_DISPLAY:-sdl}"
+if [[ "${QEMU_HEADLESS:-0}" == "1" ]]; then
+	QEMU_DISPLAY=none
+fi
 
 if [[ ! -f "$WIN_VM_DISK" ]]; then
 	echo "Windows VM disk not found: $WIN_VM_DISK" >&2
@@ -55,7 +59,16 @@ QEMU_ARGS=(
 	-netdev user,id=net0
 	-device e1000e,netdev=net0
 	-device qemu-xhci,id=xhci
+	-display "$QEMU_DISPLAY"
 )
+
+if [[ -n "${QEMU_DISPLAY_SOCKET:-}" ]]; then
+	QEMU_ARGS+=(
+		-chardev "socket,id=ayeadrive-display,path=$QEMU_DISPLAY_SOCKET,server=off,wait=on"
+		-device virtio-serial
+		-device "virtserialport,chardev=ayeadrive-display,name=ayeadrive.display"
+	)
+fi
 
 if [[ -n "$TEST_MEDIA_ISO" ]]; then
 	if [[ ! -f "$TEST_MEDIA_ISO" ]]; then

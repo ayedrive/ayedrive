@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AyeDrive WebGPU Display</title>
+	<style>body{margin:0;background:#101522;color:#d9e7ff;font:14px sans-serif}main{display:grid;place-items:center;min-height:100vh}canvas{width:min(90vw,960px);height:auto;image-rendering:pixelated;border:1px solid #2d4566;background:#0c1220}#console{width:min(90vw,960px);height:70vh;box-sizing:border-box;background:#0c1220;color:#b9f6ca;border:1px solid #2d4566;padding:12px;white-space:pre-wrap;overflow:auto;font:13px monospace}#status{padding:10px}</style>
+</head>
+<body>
+<main><div><canvas id="display"></canvas><pre id="console" hidden></pre><div id="status">Starting display…</div></div></main>
+<script type="module" src="display.js"></script>
+</body>
+</html>

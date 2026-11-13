@@ -27,6 +27,8 @@ The repository now contains an automated planning and traceability contract. It 
 | Accredited laboratory | `REV-ACCREDITED-LAB` | Planned/open | Applicable accreditation scheme, scope, contract, witnessed results |
 | Standards/regulators | `standardsAssumptions` | Applicability assumptions | Jurisdiction, intended use, risk class, confirmed standards and regulator interpretation |
 | Reproducibility | schema/CLI/attestation tooling | Host workflow observed | Controlled release archive, signed artifacts, independent reproduction |
+| Standalone HAL/device families | `tools/ayeadrive_sim/hal_harness.py` and `standalone-hal-os-matrix.json` | All 15 families pass host emulation | OS-specific guest binding, physical correlation, HIL, independent review |
+| QEMU OS emulation | `tools/ayeadrive_qemu.py` | Runner and prerequisite-gated report validated | Authorized guest image, checksum, guest test command, OS-specific result |
 
 ## Automated gates
 

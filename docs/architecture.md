@@ -43,6 +43,85 @@ The HAL is deliberately capability-based: device-specific code can request contr
 - Host tests validate the core with fake HALs; VM integration validates a specific binding/model; hardware-in-the-loop validates a particular physical device and firmware revision.
 - Destructive storage/control tests require isolated throwaway media and explicit opt-in.
 
+## Emulator and QEMU integration matrix
+
+QEMU is an optional execution environment, not a required layer for native host-OS or physical-device paths. The project supports two device providers:
+
+- **AyeDrive device simulation** — the preferred provider, implemented against the portable HAL.
+- **External emulator device simulation** — a compatibility provider, accessed through an AyeDrive compatibility shim when a direct AyeDrive simulation is not yet available.
+
+The compatibility shim is an adapter owned by AyeDrive. It does not make QEMU, Renode, or another emulator part of the portable core, and it does not change the existing OS adapters.
+
+### Native host-OS paths
+
+There is no QEMU in the preferred native path:
+
+```text
+Host OS <-> AyeDrive HAL <-> AyeDrive device simulation
+```
+
+The short-term compatibility path may use an existing QEMU device model without making QEMU a native OS requirement:
+
+```text
+Host OS <-> AyeDrive HAL <-> AyeDrive compatibility shim <-> QEMU device simulation
+```
+
+### QEMU paths
+
+When the device is exposed through QEMU, QEMU is the outer execution environment:
+
+```text
+Host OS <-> QEMU <-> AyeDrive HAL <-> AyeDrive device simulation
+```
+
+The quick compatibility form is:
+
+```text
+Host OS <-> QEMU <-> AyeDrive HAL <-> AyeDrive compatibility shim <-> QEMU device simulation
+```
+
+The QEMU adapter/shim is distinct from Windows, Linux, Android, macOS, and RTOS/Arduino OS adapters.
+
+### Guest OS running on QEMU
+
+The host-side QEMU device path and the guest-side OS path are independent layers. Preferred combinations use AyeDrive device simulations on both sides:
+
+```text
+Host OS <-> QEMU [QEMU <-> AyeDrive HAL <-> AyeDrive device simulation]
+		<-> Guest OS <-> AyeDrive HAL <-> AyeDrive device simulation
+```
+
+Each side may temporarily use the compatibility shim instead:
+
+```text
+Host OS <-> QEMU [QEMU <-> AyeDrive HAL <-> compatibility shim <-> QEMU device simulation]
+		<-> Guest OS <-> AyeDrive HAL <-> compatibility shim <-> QEMU device simulation
+```
+
+Mixed combinations are also valid: either the host-side or guest-side layer may use the preferred simulation while the other uses the compatibility shim. The host and guest HAL instances remain separate and must not be conflated.
+
+### Unmodified QEMU
+
+Unmodified QEMU remains supported, with limitations such as boot-time display/video behavior:
+
+```text
+Host OS <-> QEMU [unmodified QEMU <-> QEMU device simulation]
+		<-> Guest OS <-> AyeDrive HAL <-> AyeDrive device simulation
+```
+
+The quick guest compatibility form is:
+
+```text
+Host OS <-> QEMU [unmodified QEMU <-> QEMU device simulation]
+		<-> Guest OS <-> AyeDrive HAL <-> compatibility shim <-> QEMU device simulation
+```
+
+The same matrix applies to another applicable open-source emulator. QEMU source is an external dependency; it is not part of the portable AyeDrive core.
+
+### Strict QEMU source policy
+
+AyeDrive does not carry, vendor, modify, or distribute QEMU source code. For QEMU device-use scenarios, native-host build scripts and Makefiles may obtain QEMU only from the host package source mechanism or the official QEMU upstream repository, pin and verify the intended QEMU version, build against that external checkout, and run validation. The checkout and build output remain external artifacts and must not be committed to this repository. Only AyeDrive-owned adapters, contracts, scripts, tests, and provenance records belong here. The same policy applies to another open-source emulator used as an external provider.
+
 ## Critical-system boundary
 This repository is a development/training scaffold, not a safety certification or production-readiness claim. Before use in a safety-related system, establish the applicable standard and safety case, perform hazard/risk analysis, requirements traceability, threat analysis, independent design/code review, static analysis, boundary/fault injection, concurrency and power-failure tests, hardware-in-the-loop testing, release controls, and audit evidence. The required standard depends on the domain (for example, automotive, medical, industrial, aerospace, or rail); no SIL/ASIL or certification level is assumed here.
 

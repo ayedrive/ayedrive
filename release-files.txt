@@ -1,4 +1,4 @@
-﻿.gitattributes
+.gitattributes
 .github/copilot-instructions.md
 .github/workflows/factory-ci.yml
 .gitignore
@@ -58,12 +58,15 @@ Shared/core/device_protocol.c
 Shared/core/device_protocol_sim.c
 Shared/core/device_store.c
 Shared/core/device_virtual_model.c
+Shared/core/display_sim.c
 Shared/include/device_hal.h
 Shared/include/device_protocol.h
 Shared/include/device_protocol_sim.h
 Shared/include/device_store.h
 Shared/include/device_types.h
 Shared/include/device_virtual_model.h
+Shared/include/display_sim.h
+Shared/include/display_transport.h
 Shared/tests/test_device_protocol.c
 Shared/tests/test_device_protocol_cpp.cpp
 Shared/tests/test_device_protocol_sim.c
@@ -72,6 +75,21 @@ Shared/tests/test_device_virtual_model.c
 Shared/tests/test_virtual_models_in_guest.sh
 Shared/tests/test_virtual_profiles.py
 Shared/tests/test_vm_guest_probe.c
+Shared/tests/test_display_sim.c
+Shared/tests/display_transport.c
+Shared/tests/test_display_transport.c
+Shared/tests/display_window_demo.c
+Shared/tests/display_linux_demo.c
+Shared/tests/display_web_source.c
+Linux/user/display_guest.c
+tools/build_display_guest_initramfs.sh
+tools/display_fanout.py
+tools/display_x11_bridge.py
+tools/validate_qemu_external.sh
+tools/webgpu_display/index.html
+tools/webgpu_display/display.js
+tools/webgpu_display_server.py
+tools/run_webgpu_display.ps1
 UMDF 2 Driver1.slnx
 UMDF 2 Driver1/Device.c
 UMDF 2 Driver1/Device.h
@@ -104,6 +122,7 @@ docs/license-and-provenance.md
 docs/platform-extension-guide.md
 docs/platform-matrix.md
 docs/qemu-ephemeral-testing.md
+docs/standalone-hal-and-qemu.md
 docs/requirements/MRD-market.md
 docs/requirements/MRD-master.md
 docs/requirements/SRS.md
